@@ -1,0 +1,48 @@
+{
+  "total_logs": 6,
+  "last_updated": "2025-06-18T14:42:18.589328",
+  "logs": [
+    {
+      "timestamp": "2025-06-16T10:00:00",
+      "level": "INFO",
+      "user": "user1",
+      "message": "Started process",
+      "raw": "[2025-06-16T10:00:00] INFO user1: Started process"
+    },
+    {
+      "timestamp": "2025-06-16T10:00:01",
+      "level": "ERROR",
+      "user": "user1",
+      "message": "Failed to connect",
+      "raw": "[2025-06-16T10:00:01] ERROR user1: Failed to connect"
+    },
+    {
+      "timestamp": "2025-06-16T10:00:02",
+      "level": "INFO",
+      "user": "user2",
+      "message": "Login successful",
+      "raw": "[2025-06-16T10:00:02] INFO user2: Login successful"
+    },
+    {
+      "timestamp": "2025-06-16T10:00:03",
+      "level": "WARN",
+      "user": "user3",
+      "message": "Low memory",
+      "raw": "[2025-06-16T10:00:03] WARN user3: Low memory"
+    },
+    {
+      "timestamp": "2025-06-16T10:00:04",
+      "level": "ERROR",
+      "user": "user2",
+      "message": "Timeout occurred",
+      "raw": "[2025-06-16T10:00:04] ERROR user2: Timeout occurred"
+    },
+    {
+      "timestamp": "2025-06-16T10:00:05",
+      "level": "INFO",
+      "user": "user1",
+      "message": "Retrying connection",
+      "raw": "[2025-06-16T10:00:05] INFO user1: Retrying connection"
+    }
+  ]
+}
