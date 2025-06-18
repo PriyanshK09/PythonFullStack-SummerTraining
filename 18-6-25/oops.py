@@ -91,3 +91,20 @@ class BankAccountPolymorphism:
     def display_balance(self):
         return f"Holder: {self.holder}, Balance: {self.amount}"
     
+# Polymorphism Example
+def perform_transaction(account, amount, transaction_type):
+    if transaction_type == 'deposit':
+        return account.deposit(amount)
+    elif transaction_type == 'withdraw':
+        return account.withdraw(amount)
+    else:
+        return "Invalid transaction type"
+    
+# Example usage
+account1 = BankAccountPolymorphism(1000, "Alice")
+account2 = BankAccountPolymorphism(2000, "Bob")
+
+print(perform_transaction(account1, 500, 'deposit'))   # 1500
+print(perform_transaction(account1, 200, 'withdraw'))  # 1300
+print(perform_transaction(account2, 300, 'deposit'))   # 2300
+print(perform_transaction(account2, 100, 'withdraw'))  # 2200
