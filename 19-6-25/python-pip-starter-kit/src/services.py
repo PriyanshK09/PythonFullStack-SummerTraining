@@ -1,6 +1,5 @@
 from  .repository import *
 from  .modals import MetroCard
-import math
 
 def balance(mid  ,  balance ):
     metroCard[mid] = MetroCard(mid  ,int(balance) )
@@ -10,7 +9,7 @@ def balance(mid  ,  balance ):
 def rechargeCard(card  , ammount , src) :
     card.add_balance(ammount)
     station  = stations[src]
-    x =  math.ceil(ammount*2/100)
+    x =  ammount*2/100
     station.add_ammount(x)
 
 
@@ -18,16 +17,20 @@ def check_in(mid  ,  type  ,  src) :
     card = metroCard[mid]
     fare =  rates[type]
     station = stations[src]
-
+    round_trip  =  False
     if (card.src == "AIRPORT" and src == "CENTRAL") or (card.src == "CENTRAL" and src == "AIRPORT") :
         fare =  fare/2
         station.add_discount(fare)
+        round_trip =  True
 
     if card.balance <  fare  :
         rechargeCard(card , fare - card.balance , src)
 
     card.add_balance(-1*fare)
-    card.update_src(src)
+    if round_trip :
+        card.update_src(None)
+    else  :
+        card.update_src(src)
 
 
     station.add_ammount(fare)
@@ -35,20 +38,14 @@ def check_in(mid  ,  type  ,  src) :
 
 
 def summary():
-    central = stations['CENTRAL']
-    print(f"TOTAL_COLLECTION CENTRAL {int(central.total_ammount)} {int(central.discount)}")
-    
-    if central.passengerHistory:
+    for station_name in ['CENTRAL', 'AIRPORT']:
+        station = stations[station_name]
+
+        print(f"TOTAL_COLLECTION {station_name} {int(station.total_ammount)}  {int(station.discount)}")
         print("PASSENGER_TYPE_SUMMARY")
-        for passenger_type in sorted(central.passengerHistory.keys()):
-            count = central.passengerHistory[passenger_type]
+
+
+        for passenger_type, count in sorted(station.passengerHistory.items()):
             print(f"{passenger_type} {count}")
-    
-    airport = stations['AIRPORT']
-    print(f"TOTAL_COLLECTION AIRPORT {int(airport.total_ammount)} {int(airport.discount)}")
-    
-    if airport.passengerHistory:
-        print("PASSENGER_TYPE_SUMMARY")
-        for passenger_type in sorted(airport.passengerHistory.keys()):
-            count = airport.passengerHistory[passenger_type]
-            print(f"{passenger_type} {count}")
+
+
