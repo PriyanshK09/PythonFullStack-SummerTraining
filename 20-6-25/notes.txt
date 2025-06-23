@@ -1,0 +1,37 @@
+------------------------------------------------------SOLID Principles--------------------------------------------------
+// SOLID is an acronym for five design principles intended to make software designs more understandable, flexible, and maintainable.
+
+-> SOLID Principles: 
+   - S: Single Responsibility Principle (SRP)
+   - O: Open/Closed Principle (OCP)
+   - L: Liskov Substitution Principle (LSP)
+   - I: Interface Segregation Principle (ISP)
+   - D: Dependency Injection Principle (DIP)
+
+1. Single Responsibility Principle (SRP)->Encapsulation
+   - A class should have only one reason to change, meaning it should have only one job or responsibility.
+   - Example: A class that handles user authentication should not also handle user notifications.
+
+2. Open/Closed Principle (OCP)->Inheritance
+   - Software entities should be open for extension but closed for modification.
+   - Software entities (classes, modules, functions, etc.) should be open for extension but closed for modification.
+   - Example: You can add new functionality by adding new classes rather than modifying existing ones.
+
+3. Liskov Substitution Principle (LSP)->Polymorphism
+    - Subtypes must be substitutable for their base types without altering the correctness of the program.
+    - Objects of a superclass should be replaceable with objects of a subclass without affecting the correctness of the program.
+    - Example: If a function works with a base class, it should also work with any derived class.
+
+4. Interface Segregation Principle (ISP)->Abstraction
+   - Clients should not be forced to depend on interfaces they do not use.
+    - It is better to have many small, specific interfaces than one large, general-purpose interface.
+   - Example: Instead of one large interface, create smaller, more specific interfaces that clients can implement as needed.
+
+5. Dependency Injection Principle (DIP)->Dependency Injection
+   - High-level modules should not depend on low-level modules. Both should depend on abstractions.
+   - Abstractions should not depend on details. Details should depend on abstractions.
+   - Example: Use interfaces or abstract classes to decouple high-level and low-level modules.
+
+// These principles help in creating software that is easier to maintain, extend, and understand.
+// They promote better organization of code, reduce dependencies, and enhance the overall design of the software
+// architecture.
