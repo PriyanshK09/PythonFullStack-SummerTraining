@@ -48,3 +48,20 @@ For any questions or feedback regarding the training program, please contact:
 - Inheritance and polymorphism
 - Encapsulation and abstraction
 - Working with class methods and static methods
+
+## Day 4: GeekTrust MetroCard Question/Assignment Solution [19th July](/19-6-25/)
+- Understanding the problem statement
+- Designing the solution
+- Implementing the solution in Python
+- Testing and debugging the solution
+
+## Day 5: Introduction to SOLID Principles [20th July](/20-6-25/)
+- Overview of SOLID principles
+- Single Responsibility Principle (SRP)
+- Open/Closed Principle (OCP)
+- Liskov Substitution Principle (LSP)
+- Interface Segregation Principle (ISP)
+- Dependency Inversion Principle (DIP)
+
+## Day 6: Introduction to API Development [21st July](/21-6-25/)
+- Understanding RESTful APIs
