@@ -65,3 +65,5 @@ For any questions or feedback regarding the training program, please contact:
 
 ## Day 6: Introduction to API Development [21st July](/21-6-25/)
 - Understanding RESTful APIs
+- ReqRes API example
+- Making GET and POST requests
