@@ -63,7 +63,14 @@ For any questions or feedback regarding the training program, please contact:
 - Interface Segregation Principle (ISP)
 - Dependency Inversion Principle (DIP)
 
-## Day 6: Introduction to API Development [21st July](/21-6-25/)
+## Day 6: Introduction to API Development [23rd July](/23-6-25/)
 - Understanding RESTful APIs
 - ReqRes API example
 - Making GET and POST requests
+
+## Day 7: Django Framework Basics [24th July](/24-6-25/)
+- Introduction to Django
+- Setting up a Django project
+- Understanding Django apps
+- Creating models and migrations
+
