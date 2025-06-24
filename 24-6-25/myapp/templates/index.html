@@ -1,24 +1,184 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do App</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #2563eb;
+            --light-blue: #dbeafe;
+            --lighter-blue: #f0f8ff;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--lighter-blue) 0%, #ffffff 50%, var(--light-blue) 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .card {
+            border: none;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.1);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        
+        .task-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary-blue);
+        }
+        
+        .task-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+        }
+        
+        .btn-primary {
+            background: var(--primary-blue);
+            border: none;
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+        }
+        
+        .form-control {
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
+        }
+        
+        .btn-outline-success {
+            border-radius: 8px;
+            border-width: 2px;
+        }
+        
+        .btn-outline-danger {
+            border-radius: 8px;
+            border-width: 2px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            padding: 3rem 1rem;
+        }
+        
+        .title-icon {
+            color: var(--primary-blue);
+            margin-right: 0.5rem;
+        }
+    </style>
 </head>
 <body>
-    <h1>To-Do List</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Add</button>
-    </form>
-    <ul>
-        {% for id, task in tasks.items %}
-            <li>{{ task }} <a href="/delete/{{ id }}/">❌</a></li>
-        {% empty %}
-            <li>No tasks yet.</li>
-        {% endfor %}
-    </ul>
+    <div class="main-container">
+        <!-- Header -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-primary">
+                <i class="bi bi-check2-square title-icon"></i>
+                To-Do List
+            </h1>
+            <p class="text-muted">Stay organized and productive</p>
+        </div>
+
+        <!-- Add Task Form -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form method="post" class="row g-3">
+                    {% csrf_token %}
+                    <div class="col-md-8">
+                        <label for="{{ form.task.id_for_label }}" class="form-label fw-semibold text-primary">
+                            <i class="bi bi-plus-circle me-2"></i>Add New Task
+                        </label>
+                        <input type="text" 
+                               name="{{ form.task.name }}" 
+                               id="{{ form.task.id_for_label }}"
+                               class="form-control form-control-lg" 
+                               placeholder="What needs to be done?"
+                               required>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            <i class="bi bi-plus-lg me-2"></i>Add Task
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tasks List -->
+        <div class="card">
+            <div class="card-header bg-white border-0 pb-0">
+                <h5 class="card-title text-primary mb-0">
+                    <i class="bi bi-list-task me-2"></i>
+                    Your Tasks ({{ tasks|length }})
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if tasks %}
+                    <div class="row g-3">
+                        {% for id, task in tasks.items %}
+                            <div class="col-12">
+                                <div class="card task-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="flex-grow-1">
+                                                <span class="fs-6 text-dark">{{ task }}</span>
+                                            </div>
+                                            <div class="btn-group" role="group">
+                                                <a href="/edit/{{ id }}/" 
+                                                   class="btn btn-outline-success btn-sm" 
+                                                   title="Edit task">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <a href="/delete/{{ id }}/" 
+                                                   class="btn btn-outline-danger btn-sm" 
+                                                   title="Delete task"
+                                                   onclick="return confirm('Are you sure you want to delete this task?')">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="bi bi-inbox display-1 text-muted mb-3"></i>
+                        <h5 class="text-muted">No tasks yet</h5>
+                        <p class="text-muted">Add your first task above to get started!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

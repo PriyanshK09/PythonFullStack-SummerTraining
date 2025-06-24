@@ -10,7 +10,8 @@ def index(request):
     if request.method == 'POST':
         form = TaskForm(request.POST)
         if form.is_valid():
-            task_id = len(tasks) + 1
+            # Generate new task ID
+            task_id = max(tasks.keys()) + 1 if tasks else 1
             tasks[task_id] = form.cleaned_data['task']
             return redirect('/')
     else:
@@ -20,3 +21,22 @@ def index(request):
 def delete_task(request, task_id):
     tasks.pop(task_id, None)
     return redirect('/')
+
+def edit_task(request, task_id):
+    if task_id not in tasks:
+        return redirect('/')
+        
+    if request.method == 'POST':
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            tasks[task_id] = form.cleaned_data['task']
+            return redirect('/')
+    else:
+        initial_data = {'task': tasks.get(task_id, '')}
+        form = TaskForm(initial=initial_data)
+    
+    return render(request, 'edit_task.html', {
+        'form': form, 
+        'task_id': task_id,
+        'current_task': tasks.get(task_id, '')
+    })

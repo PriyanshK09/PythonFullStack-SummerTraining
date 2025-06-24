@@ -73,4 +73,5 @@ For any questions or feedback regarding the training program, please contact:
 - Setting up a Django project
 - Understanding Django apps
 - Creating models and migrations
-
+- Made To Do List Application
+- Usage of Bootstrap in Django
