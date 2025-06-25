@@ -1,81 +1,22 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Task - To-Do App</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        :root {
-            --primary-blue: #2563eb;
-            --light-blue: #dbeafe;
-            --lighter-blue: #f0f8ff;
-        }
-        
-        body {
-            background: linear-gradient(135deg, var(--lighter-blue) 0%, #ffffff 50%, var(--light-blue) 100%);
-            min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        .main-container {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-        
-        .card {
-            border: none;
-            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.1);
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-        }
-        
-        .btn-primary {
-            background: var(--primary-blue);
-            border: none;
-            border-radius: 12px;
-            padding: 0.75rem 1.5rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary:hover {
-            background: #1d4ed8;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
-        }
-        
-        .btn-secondary {
-            border-radius: 12px;
-            padding: 0.75rem 1.5rem;
-            font-weight: 600;
-        }
-        
-        .form-control {
-            border-radius: 12px;
-            border: 2px solid #e5e7eb;
-            padding: 0.75rem 1rem;
-            transition: all 0.3s ease;
-        }
-        
-        .form-control:focus {
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
-        }
-        
-        .title-icon {
-            color: var(--primary-blue);
-            margin-right: 0.5rem;
-        }
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        form { margin-bottom: 20px; }
+        input[type="text"] { width: 70%; padding: 8px; margin-right: 10px; }
+        button { padding: 8px 15px; background: #007cba; color: white; border: none; cursor: pointer; }
+        button:hover { background: #005a85; }
+        .cancel-btn { background: #6c757d; margin-left: 5px; }
+        .cancel-btn:hover { background: #545b62; }
     </style>
 </head>
 <body>
-    <div class="main-container">
+    <div class="container">
         <!-- Header -->
         <div class="text-center mb-4">
             <h1 class="h2 fw-bold text-primary">

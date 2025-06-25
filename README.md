@@ -75,3 +75,8 @@ For any questions or feedback regarding the training program, please contact:
 - Creating models and migrations
 - Made To Do List Application
 - Usage of Bootstrap in Django
+
+## Day 8: DB Operations in Python using SQL Connector [25th July](/25-6-25/)
+- Connecting to a MySQL database using SQL Connector
+- Performing CRUD operations
+- Understanding SQL queries in Python
