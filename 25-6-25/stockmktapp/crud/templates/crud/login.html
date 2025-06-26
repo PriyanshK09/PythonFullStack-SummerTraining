@@ -1,0 +1,45 @@
+{% extends 'crud/base.html' %}
+{% block title %}Login - StockFolio{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4 class="mb-0">
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="{{ form.email.id_for_label }}" class="form-label">Email Address</label>
+                            {{ form.email }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.password.id_for_label }}" class="form-label">Password</label>
+                            {{ form.password }}
+                        </div>
+                        
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-primary-custom">
+                                <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                            </button>
+                        </div>
+                        
+                        <div class="text-center">
+                            <p class="mb-0">Don't have an account?</p>
+                            <a href="{% url 'register' %}" class="text-decoration-none text-success-custom fw-bold">
+                                Create Account
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

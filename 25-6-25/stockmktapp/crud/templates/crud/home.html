@@ -1,0 +1,226 @@
+{% extends 'crud/base.html' %}
+{% load static %}
+
+{% block title %}StockFolio - Professional Trading Platform{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="hero-title">
+                    Trade Smarter with 
+                    <span class="text-warning">StockFolio</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Your comprehensive platform for stock trading, portfolio management, 
+                    and real-time market analysis. Start building your financial future today.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    {% if not user.is_authenticated %}
+                    <a href="{% url 'register' %}" class="btn btn-gold btn-lg">
+                        <i class="fas fa-user-plus me-2"></i>Get Started Free
+                    </a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </a>
+                    {% else %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-gold btn-lg">
+                        <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                    </a>
+                    <a href="{% url 'search_stocks' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-search me-2"></i>Search Stocks
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <div class="hero-animation">
+                    <i class="fas fa-chart-line fa-10x text-warning pulse"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="display-4 fw-bold text-primary-custom mb-3">
+                    Why Choose StockFolio?
+                </h2>
+                <p class="lead text-muted">
+                    Professional-grade tools designed for traders of all levels
+                </p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="card stats-card h-100 text-center">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="fas fa-chart-bar fa-3x text-primary-custom"></i>
+                        </div>
+                        <h5 class="card-title">Real-Time Data</h5>
+                        <p class="card-text">
+                            Get live stock prices, market data, and news updates 
+                            powered by Tiingo's professional-grade API.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card stats-card h-100 text-center">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="fas fa-briefcase fa-3x text-success-custom"></i>
+                        </div>
+                        <h5 class="card-title">Portfolio Management</h5>
+                        <p class="card-text">
+                            Track your investments, monitor performance, and 
+                            make informed decisions with comprehensive analytics.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card stats-card h-100 text-center">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="fas fa-newspaper fa-3x text-warning"></i>
+                        </div>
+                        <h5 class="card-title">Market News</h5>
+                        <p class="card-text">
+                            Stay informed with the latest financial news, 
+                            company updates, and market analysis.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Popular Stocks Section -->
+{% if popular_stocks %}
+<section class="py-5 bg-light-custom">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h3 class="display-5 fw-bold text-primary-custom">
+                    <i class="fas fa-fire me-2"></i>Popular Stocks
+                </h3>
+                <p class="lead text-muted">Most traded stocks on our platform</p>
+            </div>
+        </div>
+        
+        <div class="row g-3">
+            {% for stock in popular_stocks %}
+            <div class="col-lg-3 col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="stock-ticker mb-0">{{ stock.ticker }}</h6>
+                            {% if stock.current_price %}
+                            <span class="badge bg-success-custom">
+                                ${{ stock.current_price|floatformat:2 }}
+                            </span>
+                            {% endif %}
+                        </div>
+                        <p class="text-muted small mb-3">{{ stock.name|truncatechars:30 }}</p>
+                        <div class="d-flex gap-2">
+                            <a href="{% url 'stock_detail' stock.ticker %}" class="btn btn-outline-primary-custom btn-sm flex-fill">
+                                <i class="fas fa-eye me-1"></i>View
+                            </a>
+                            {% if user.is_authenticated and stock.current_price %}
+                            <a href="{% url 'buy_stock' stock.ticker %}" class="btn btn-primary-custom btn-sm flex-fill">
+                                <i class="fas fa-shopping-cart me-1"></i>Buy
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'search_stocks' %}" class="btn btn-primary-custom btn-lg">
+                <i class="fas fa-search me-2"></i>Explore More Stocks
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Stats Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="stats-card card">
+                    <div class="card-body">
+                        <div class="stats-value">10K+</div>
+                        <div class="stats-label">Active Users</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stats-card card">
+                    <div class="card-body">
+                        <div class="stats-value">$2M+</div>
+                        <div class="stats-label">Assets Managed</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stats-card card">
+                    <div class="card-body">
+                        <div class="stats-value">500+</div>
+                        <div class="stats-label">Stocks Available</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stats-card card">
+                    <div class="card-body">
+                        <div class="stats-value">24/7</div>
+                        <div class="stats-label">Support</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+{% if not user.is_authenticated %}
+<section class="py-5 bg-primary-custom text-white">
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h3 class="display-5 fw-bold mb-3">Ready to Start Trading?</h3>
+                <p class="lead mb-4">
+                    Join thousands of traders who trust StockFolio for their investment needs. 
+                    Start with $10,000 virtual money to practice your trading skills.
+                </p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="{% url 'register' %}" class="btn btn-gold btn-lg">
+                        <i class="fas fa-rocket me-2"></i>Start Trading Now
+                    </a>
+                    <a href="{% url 'search_stocks' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-search me-2"></i>Browse Stocks
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,703 @@
+/* ==============================================
+   StockFolio - Professional Trading App Styles
+   ============================================== */
+
+/* ============ ROOT VARIABLES ============ */
+:root {
+    --primary-green: #2E8B57;
+    --primary-green-dark: #1F5F3F;
+    --primary-green-light: #90EE90;
+    --secondary-blue: #1E3A8A;
+    --accent-gold: #FFD700;
+    --accent-gold-dark: #B8860B;
+    --success-green: #10B981;
+    --danger-red: #EF4444;
+    --warning-orange: #F59E0B;
+    --info-blue: #3B82F6;
+    --light-gray: #F8FAFC;
+    --medium-gray: #64748B;
+    --dark-gray: #1E293B;
+    --white: #FFFFFF;
+    --border-color: #E2E8F0;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --border-radius: 0.5rem;
+    --border-radius-lg: 0.75rem;
+    --transition: all 0.3s ease;
+}
+
+/* ============ GLOBAL STYLES ============ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    color: var(--dark-gray);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* ============ NAVIGATION ============ */
+.navbar-custom {
+    background-color: var(--primary-green);
+    box-shadow: var(--shadow-lg);
+    border-bottom: 3px solid var(--accent-gold);
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    font-weight: 800;
+    font-size: 1.75rem;
+    color: var(--white) !important;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar-brand i {
+    color: var(--accent-gold);
+    font-size: 2rem;
+}
+
+.navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 500;
+    margin: 0 0.5rem;
+    padding: 0.5rem 1rem !important;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--white) !important;
+    transform: translateY(-1px);
+}
+
+.navbar-nav .nav-link.active {
+    background-color: var(--accent-gold);
+    color: var(--dark-gray) !important;
+    font-weight: 600;
+}
+
+.navbar-toggler {
+    border: none;
+    color: var(--white);
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+/* ============ CARDS & CONTAINERS ============ */
+.card {
+    border: none;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    background: var(--white);
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.card-header {
+    background-color: var(--light-gray);
+    border-bottom: 2px solid var(--border-color);
+    font-weight: 600;
+    color: var(--dark-gray);
+    padding: 1.25rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.card-footer {
+    background-color: var(--light-gray);
+    border-top: 1px solid var(--border-color);
+    padding: 1rem 1.5rem;
+}
+
+/* ============ BUTTONS ============ */
+.btn {
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    transition: var(--transition);
+    border: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-primary-custom {
+    background-color: var(--primary-green);
+    color: var(--white);
+    border: 2px solid var(--primary-green);
+}
+
+.btn-primary-custom:hover {
+    background-color: var(--primary-green-dark);
+    border-color: var(--primary-green-dark);
+    color: var(--white);
+}
+
+.btn-gold {
+    background-color: var(--accent-gold);
+    color: var(--dark-gray);
+    border: 2px solid var(--accent-gold);
+}
+
+.btn-gold:hover {
+    background-color: var(--accent-gold-dark);
+    border-color: var(--accent-gold-dark);
+    color: var(--dark-gray);
+}
+
+.btn-success-custom {
+    background-color: var(--success-green);
+    color: var(--white);
+    border: 2px solid var(--success-green);
+}
+
+.btn-success-custom:hover {
+    background-color: #059669;
+    border-color: #059669;
+    color: var(--white);
+}
+
+.btn-danger-custom {
+    background-color: var(--danger-red);
+    color: var(--white);
+    border: 2px solid var(--danger-red);
+}
+
+.btn-danger-custom:hover {
+    background-color: #DC2626;
+    border-color: #DC2626;
+    color: var(--white);
+}
+
+.btn-outline-primary-custom {
+    border: 2px solid var(--primary-green);
+    color: var(--primary-green);
+    background: transparent;
+}
+
+.btn-outline-primary-custom:hover {
+    background-color: var(--primary-green);
+    color: var(--white);
+}
+
+.btn-outline-light {
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.9);
+    background: transparent;
+}
+
+.btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--white);
+    color: var(--white);
+}
+
+/* ============ FORMS ============ */
+.form-control {
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    transition: var(--transition);
+    background-color: var(--white);
+}
+
+.form-control:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 0.2rem rgba(46, 139, 87, 0.25);
+    background-color: var(--white);
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--dark-gray);
+    margin-bottom: 0.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+/* ============ TABLES ============ */
+.table {
+    background: var(--white);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.table thead th {
+    background-color: var(--primary-green);
+    color: var(--white);
+    font-weight: 600;
+    border: none;
+    padding: 1rem;
+}
+
+.table tbody tr {
+    transition: var(--transition);
+}
+
+.table tbody tr:hover {
+    background-color: rgba(46, 139, 87, 0.05);
+}
+
+.table tbody td {
+    padding: 1rem;
+    border-color: var(--border-color);
+    vertical-align: middle;
+}
+
+/* ============ STOCK SPECIFIC STYLES ============ */
+.stock-ticker {
+    font-family: 'Courier New', monospace;
+    font-weight: 800;
+    color: var(--primary-green);
+    font-size: 2rem;
+    letter-spacing: 0.1em;
+}
+
+.stock-price {
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    color: var(--success-green);
+}
+
+.price-positive {
+    color: var(--success-green);
+}
+
+.price-negative {
+    color: var(--danger-red);
+}
+
+.price-neutral {
+    color: var(--medium-gray);
+}
+
+/* ============ ALERTS & MESSAGES ============ */
+.alert {
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid;
+}
+
+.alert-success {
+    background-color: #ECFDF5;
+    color: #065F46;
+    border-left-color: var(--success-green);
+}
+
+.alert-danger {
+    background-color: #FEF2F2;
+    color: #991B1B;
+    border-left-color: var(--danger-red);
+}
+
+.alert-warning {
+    background-color: #FFFBEB;
+    color: #92400E;
+    border-left-color: var(--warning-orange);
+}
+
+.alert-info {
+    background-color: #EFF6FF;
+    color: #1E40AF;
+    border-left-color: var(--info-blue);
+}
+
+/* ============ BADGES ============ */
+.badge {
+    font-weight: 600;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--border-radius);
+}
+
+.bg-success-custom {
+    background-color: var(--success-green) !important;
+}
+
+.bg-danger-custom {
+    background-color: var(--danger-red) !important;
+}
+
+.bg-warning-custom {
+    background-color: var(--warning-orange) !important;
+}
+
+.bg-primary-custom {
+    background-color: var(--primary-green) !important;
+}
+
+/* ============ HERO SECTION ============ */
+.hero-section {
+    background-color: var(--primary-green);
+    color: var(--white);
+    padding: 4rem 0;
+    margin-bottom: 2rem;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+}
+
+/* ============ STATS CARDS ============ */
+.stats-card {
+    background-color: var(--white);
+    border-left: 4px solid var(--primary-green);
+    transition: var(--transition);
+}
+
+.stats-card:hover {
+    border-left-color: var(--accent-gold);
+    transform: translateY(-2px);
+}
+
+.stats-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--primary-green);
+}
+
+.stats-label {
+    color: var(--medium-gray);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+}
+
+/* ============ NEWS SECTION ============ */
+.news-item {
+    transition: var(--transition);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+}
+
+.news-item:hover {
+    background-color: var(--light-gray);
+    transform: translateX(5px);
+}
+
+.news-title {
+    color: var(--dark-gray);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.news-title:hover {
+    color: var(--primary-green);
+}
+
+.news-meta {
+    color: var(--medium-gray);
+    font-size: 0.875rem;
+}
+
+/* ============ CHART CONTAINER ============ */
+.chart-container {
+    position: relative;
+    background: var(--white);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+}
+
+#priceChart {
+    max-height: 400px;
+}
+
+/* ============ SEARCH SECTION ============ */
+.search-container {
+    background: var(--white);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 2rem;
+}
+
+.search-input-group {
+    position: relative;
+}
+
+.search-input-group .form-control {
+    padding-left: 3rem;
+    height: 3.5rem;
+    font-size: 1.1rem;
+}
+
+.search-input-group .search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--medium-gray);
+    z-index: 10;
+}
+
+/* ============ FOOTER ============ */
+.footer {
+    background-color: var(--dark-gray);
+    color: var(--white);
+    padding: 3rem 0 2rem;
+    margin-top: 4rem;
+}
+
+.footer-title {
+    color: var(--accent-gold);
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.footer-link {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.footer-link:hover {
+    color: var(--accent-gold);
+}
+
+/* ============ RESPONSIVE DESIGN ============ */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .stock-ticker {
+        font-size: 1.5rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.9rem;
+    }
+    
+    .stats-value {
+        font-size: 1.5rem;
+    }
+}
+
+/* ============ ANIMATIONS ============ */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+/* ============ UTILITY CLASSES ============ */
+.text-primary-custom {
+    color: var(--primary-green) !important;
+}
+
+.text-gold {
+    color: var(--accent-gold) !important;
+}
+
+.bg-light-custom {
+    background-color: var(--light-gray) !important;
+}
+
+.border-primary-custom {
+    border-color: var(--primary-green) !important;
+}
+
+.shadow-custom {
+    box-shadow: var(--shadow-lg) !important;
+}
+
+.rounded-custom {
+    border-radius: var(--border-radius-lg) !important;
+}
+
+/* ============ LOADING STATES ============ */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--white);
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============ MARKET STATUS ============ */
+.market-status-open {
+    background-color: var(--success-green);
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+}
+
+.market-status-closed {
+    background-color: var(--danger-red);
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+}
+
+/* ============ PORTFOLIO STYLES ============ */
+.portfolio-summary {
+    background-color: var(--primary-green);
+    color: var(--white);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.portfolio-value {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.portfolio-change {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+/* ============ WATCHLIST STYLES ============ */
+.watchlist-item {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    transition: var(--transition);
+    border-left: 4px solid var(--primary-green);
+}
+
+.watchlist-item:hover {
+    transform: translateX(5px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ============ SPECIAL SECTIONS ============ */
+.bg-cream {
+    background-color: #f8f9fa !important;
+}
+
+.text-success-custom {
+    color: var(--success-green) !important;
+}
+
+/* ============ DROPDOWN MENUS ============ */
+.dropdown-menu {
+    border: none;
+    box-shadow: var(--shadow-lg);
+    border-radius: var(--border-radius);
+}
+
+.dropdown-item {
+    padding: 0.75rem 1rem;
+    transition: var(--transition);
+}
+
+.dropdown-item:hover {
+    background-color: var(--light-gray);
+    color: var(--primary-green);
+}
+
+/* ============ PRICE STATISTICS ============ */
+.price-stats .col-md-3 {
+    border-right: 1px solid var(--border-color);
+    padding: 1rem;
+}
+
+.price-stats .col-md-3:last-child {
+    border-right: none;
+}
+
+@media (max-width: 768px) {
+    .price-stats .col-md-3 {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+    }
+    
+    .price-stats .col-md-3:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+}

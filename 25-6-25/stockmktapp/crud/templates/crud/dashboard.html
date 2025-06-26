@@ -1,0 +1,220 @@
+{% extends 'crud/base.html' %}
+{% block title %}Dashboard - StockFolio{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Welcome Header -->
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <h1 class="fw-bold text-primary-green">
+                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+            </h1>
+            <p class="text-muted">Welcome back, {{ user.first_name|default:user.username }}! Here's your portfolio overview.</p>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon me-3">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div>
+                        <div class="stat-value">${{ balance|floatformat:2 }}</div>
+                        <div class="stat-label">Available Balance</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="stat-card bg-gold text-dark">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon me-3">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div>
+                        <div class="stat-value">${{ portfolio_value|floatformat:2 }}</div>
+                        <div class="stat-label">Portfolio Value</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="stat-card" style="background: linear-gradient(135deg, #FF6B6B, #FF8E8E);">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon me-3">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div>
+                        <div class="stat-value">{{ user_stocks.count }}</div>
+                        <div class="stat-label">Holdings</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="stat-card" style="background: linear-gradient(135deg, #74B9FF, #0984E3);">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon me-3">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div>
+                        <div class="stat-value">{{ watchlist.count }}</div>
+                        <div class="stat-label">Watchlist</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Recent Holdings -->
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-briefcase me-2"></i>Your Holdings
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if user_stocks %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Stock</th>
+                                        <th>Shares</th>
+                                        <th>Buy Price</th>
+                                        <th>Current Price</th>
+                                        <th>Current Value</th>
+                                        <th>P&L</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for holding in user_stocks|slice:":5" %}
+                                    <tr>
+                                        <td>
+                                            <div>
+                                                <strong class="stock-ticker">{{ holding.stock.ticker }}</strong>
+                                                <br>
+                                                <small class="text-muted">{{ holding.stock.name|truncatechars:20 }}</small>
+                                            </div>
+                                        </td>
+                                        <td>{{ holding.quantity }}</td>
+                                        <td>${{ holding.buy_price|floatformat:2 }}</td>
+                                        <td>
+                                            {% if holding.stock.current_price %}
+                                                <span class="fw-bold">${{ holding.stock.current_price|floatformat:2 }}</span>
+                                            {% else %}
+                                                <span class="text-muted">N/A</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="fw-bold">${{ holding.current_value|floatformat:2 }}</td>
+                                        <td>
+                                            {% if holding.profit_loss > 0 %}
+                                                <span class="text-success fw-bold">+${{ holding.profit_loss|floatformat:2 }}</span>
+                                            {% elif holding.profit_loss < 0 %}
+                                                <span class="text-danger fw-bold">${{ holding.profit_loss|floatformat:2 }}</span>
+                                            {% else %}
+                                                <span class="text-muted">$0.00</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'stock_detail' holding.stock.ticker %}" class="btn btn-outline-success-custom btn-sm">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        {% if user_stocks.count > 5 %}
+                        <div class="text-center">
+                            <a href="{% url 'portfolio' %}" class="btn btn-primary-custom">
+                                <i class="fas fa-arrow-right me-2"></i>View All Holdings
+                            </a>
+                        </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No holdings yet</h5>
+                            <p class="text-muted">Start building your portfolio by searching and buying stocks.</p>
+                            <a href="{% url 'search_stocks' %}" class="btn btn-primary-custom">
+                                <i class="fas fa-search me-2"></i>Search Stocks
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Watchlist -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-eye me-2"></i>Watchlist
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if watchlist %}
+                        {% for item in watchlist|slice:":8" %}
+                        <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light rounded">
+                            <div>
+                                <strong class="stock-ticker">{{ item.stock.ticker }}</strong>
+                                <br>
+                                <small class="text-muted">{{ item.stock.name|truncatechars:15 }}</small>
+                            </div>
+                            <div class="text-end">
+                                {% if item.stock.current_price %}
+                                    <div class="fw-bold">${{ item.stock.current_price|floatformat:2 }}</div>
+                                {% else %}
+                                    <div class="text-muted">N/A</div>
+                                {% endif %}
+                                <a href="{% url 'stock_detail' item.stock.ticker %}" class="btn btn-outline-success-custom btn-xs">
+                                    <i class="fas fa-info-circle"></i>
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-3">
+                            <i class="fas fa-eye-slash fa-2x text-muted mb-2"></i>
+                            <p class="text-muted mb-2">Your watchlist is empty</p>
+                            <a href="{% url 'search_stocks' %}" class="btn btn-outline-success-custom btn-sm">
+                                <i class="fas fa-plus me-1"></i>Add Stocks
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mt-4">
+        <div class="col-lg-12">
+            <div class="card bg-cream">
+                <div class="card-body text-center">
+                    <h5 class="mb-3">Quick Actions</h5>
+                    <a href="{% url 'search_stocks' %}" class="btn btn-primary-custom me-2 mb-2">
+                        <i class="fas fa-search me-2"></i>Search Stocks
+                    </a>
+                    <a href="{% url 'portfolio' %}" class="btn btn-gold me-2 mb-2">
+                        <i class="fas fa-briefcase me-2"></i>Full Portfolio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

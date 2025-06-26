@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}StockFolio - Professional Trading Platform{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'crud/css/style.css' %}">
+    
+    <!-- Chart.js for charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="fas fa-chart-line"></i>
+                StockFolio
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="fas fa-bars text-white"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">
+                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'search_stocks' %}active{% endif %}" href="{% url 'search_stocks' %}">
+                            <i class="fas fa-search me-1"></i>Search Stocks
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'portfolio' %}active{% endif %}" href="{% url 'portfolio' %}">
+                            <i class="fas fa-briefcase me-1"></i>Portfolio
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+                
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>
+                            {{ user.username }}
+                            {% if user.balance %}
+                                <span class="badge bg-warning text-dark ms-2">
+                                    ${{ user.balance|floatformat:2 }}
+                                </span>
+                            {% endif %}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'dashboard' %}">
+                                    <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'portfolio' %}">
+                                    <i class="fas fa-briefcase me-2"></i>Portfolio
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'logout' %}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">
+                            <i class="fas fa-user-plus me-1"></i>Register
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main style="margin-top: 80px; min-height: calc(100vh - 80px);">
+        <!-- Messages -->
+        {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {% if message.tags == 'success' %}
+                    <i class="fas fa-check-circle me-2"></i>
+                {% elif message.tags == 'error' %}
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                {% elif message.tags == 'warning' %}
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                {% elif message.tags == 'info' %}
+                    <i class="fas fa-info-circle me-2"></i>
+                {% endif %}
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Page Content -->
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="footer-title">
+                        <i class="fas fa-chart-line me-2"></i>StockFolio
+                    </h5>
+                    <p class="text-light">
+                        Your professional trading platform for managing investments, 
+                        tracking portfolio performance, and staying updated with market trends.
+                    </p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="footer-link">
+                            <i class="fab fa-twitter fa-lg"></i>
+                        </a>
+                        <a href="#" class="footer-link">
+                            <i class="fab fa-linkedin fa-lg"></i>
+                        </a>
+                        <a href="#" class="footer-link">
+                            <i class="fab fa-github fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="footer-title">Platform</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'home' %}" class="footer-link">Home</a></li>
+                        <li><a href="{% url 'search_stocks' %}" class="footer-link">Search Stocks</a></li>
+                        {% if user.is_authenticated %}
+                        <li><a href="{% url 'dashboard' %}" class="footer-link">Dashboard</a></li>
+                        <li><a href="{% url 'portfolio' %}" class="footer-link">Portfolio</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="footer-title">Account</h6>
+                    <ul class="list-unstyled">
+                        {% if not user.is_authenticated %}
+                        <li><a href="{% url 'login' %}" class="footer-link">Login</a></li>
+                        <li><a href="{% url 'register' %}" class="footer-link">Register</a></li>
+                        {% else %}
+                        <li><a href="{% url 'logout' %}" class="footer-link">Logout</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                <div class="col-lg-4 mb-4">
+                    <h6 class="footer-title">Market Status</h6>
+                    <div id="footerMarketStatus" class="market-status-closed">
+                        Market Closed
+                    </div>
+                    <small class="text-light d-block mt-2">
+                        <i class="fas fa-clock me-1"></i>
+                        Trading Hours: 9:30 AM - 4:00 PM EST
+                    </small>
+                </div>
+            </div>
+            
+            <hr class="border-secondary">
+            
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0 text-light">
+                        &copy; 2025 StockFolio. All rights reserved.
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <small class="text-light">
+                        <i class="fas fa-shield-alt me-1"></i>
+                        Powered by Tiingo API
+                    </small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // Market Status Update
+        function updateFooterMarketStatus() {
+            const now = new Date();
+            const marketOpen = 9.5; // 9:30 AM
+            const marketClose = 16; // 4:00 PM
+            const currentHour = now.getHours() + now.getMinutes() / 60;
+            const isWeekday = now.getDay() >= 1 && now.getDay() <= 5;
+            
+            const statusElement = document.getElementById('footerMarketStatus');
+            
+            if (isWeekday && currentHour >= marketOpen && currentHour < marketClose) {
+                statusElement.textContent = 'Market Open';
+                statusElement.className = 'market-status-open';
+            } else {
+                statusElement.textContent = 'Market Closed';
+                statusElement.className = 'market-status-closed';
+            }
+        }
+        
+        // Update market status on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateFooterMarketStatus();
+            
+            // Add fade-in animation to main content
+            const mainContent = document.querySelector('main');
+            if (mainContent) {
+                mainContent.classList.add('fade-in-up');
+            }
+            
+            // Auto-dismiss alerts after 5 seconds
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(alert => {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 5000);
+        });
+    </script>
+    
+    {% block extra_js %}
+    {% endblock %}
+</body>
+</html>

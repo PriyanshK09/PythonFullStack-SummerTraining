@@ -1,0 +1,162 @@
+{% extends 'crud/base.html' %}
+{% block title %}Portfolio - StockFolio{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <h1 class="fw-bold text-primary-green">
+                <i class="fas fa-briefcase me-2"></i>My Portfolio
+            </h1>
+            <p class="text-muted">Complete overview of your investment holdings</p>
+        </div>
+    </div>
+
+    <!-- Portfolio Summary -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon me-3">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div>
+                        <div class="stat-value">${{ total_value|floatformat:2 }}</div>
+                        <div class="stat-label">Total Portfolio Value</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="stat-card bg-gold text-dark">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon me-3">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div>
+                        <div class="stat-value">${{ total_investment|floatformat:2 }}</div>
+                        <div class="stat-label">Total Investment</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="stat-card {% if total_profit_loss >= 0 %}bg-success{% else %}bg-danger{% endif %}">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon me-3">
+                        <i class="fas fa-{% if total_profit_loss >= 0 %}arrow-up{% else %}arrow-down{% endif %}"></i>
+                    </div>
+                    <div>
+                        <div class="stat-value">
+                            {% if total_profit_loss >= 0 %}+{% endif %}${{ total_profit_loss|floatformat:2 }}
+                        </div>
+                        <div class="stat-label">Total P&L</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Holdings Table -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list me-2"></i>All Holdings
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if user_stocks %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Stock</th>
+                                        <th>Quantity</th>
+                                        <th>Buy Price</th>
+                                        <th>Current Price</th>
+                                        <th>Investment</th>
+                                        <th>Current Value</th>
+                                        <th>P&L</th>
+                                        <th>P&L %</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for holding in user_stocks %}
+                                    <tr>
+                                        <td>
+                                            <div>
+                                                <strong class="stock-ticker">{{ holding.stock.ticker }}</strong>
+                                                <br>
+                                                <small class="text-muted">{{ holding.stock.name|truncatechars:25 }}</small>
+                                            </div>
+                                        </td>
+                                        <td class="fw-bold">{{ holding.quantity }}</td>
+                                        <td>${{ holding.buy_price|floatformat:2 }}</td>
+                                        <td>
+                                            {% if holding.stock.current_price %}
+                                                <span class="fw-bold">${{ holding.stock.current_price|floatformat:2 }}</span>
+                                            {% else %}
+                                                <span class="text-muted">N/A</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="fw-bold">${{ holding.total_investment|floatformat:2 }}</td>
+                                        <td class="fw-bold text-success-custom">${{ holding.current_value|floatformat:2 }}</td>
+                                        <td>
+                                            {% if holding.profit_loss > 0 %}
+                                                <span class="text-success fw-bold">+${{ holding.profit_loss|floatformat:2 }}</span>
+                                            {% elif holding.profit_loss < 0 %}
+                                                <span class="text-danger fw-bold">${{ holding.profit_loss|floatformat:2 }}</span>
+                                            {% else %}
+                                                <span class="text-muted">$0.00</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if holding.profit_loss_percent %}
+                                                {% if holding.profit_loss_percent > 0 %}
+                                                    <span class="text-success fw-bold">+{{ holding.profit_loss_percent|floatformat:1 }}%</span>
+                                                {% elif holding.profit_loss_percent < 0 %}
+                                                    <span class="text-danger fw-bold">{{ holding.profit_loss_percent|floatformat:1 }}%</span>
+                                                {% else %}
+                                                    <span class="text-muted">0.0%</span>
+                                                {% endif %}
+                                            {% else %}
+                                                <span class="text-muted">N/A</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="{% url 'stock_detail' holding.stock.ticker %}" class="btn btn-outline-success-custom">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="{% url 'buy_stock' holding.stock.ticker %}" class="btn btn-outline-primary">
+                                                    <i class="fas fa-plus"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-briefcase fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No holdings in your portfolio</h5>
+                            <p class="text-muted mb-4">Start building your investment portfolio by purchasing stocks.</p>
+                            <a href="{% url 'search_stocks' %}" class="btn btn-primary-custom">
+                                <i class="fas fa-search me-2"></i>Search & Buy Stocks
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

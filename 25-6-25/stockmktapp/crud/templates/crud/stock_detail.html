@@ -1,0 +1,440 @@
+{% extends 'crud/base.html' %}
+{% block title %}{{ stock.ticker }} - Stock Detail{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Stock Header -->
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h1 class="stock-ticker mb-1">{{ stock.ticker }}</h1>
+                            <h5 class="text-muted mb-2">{{ stock.name }}</h5>
+                            {% if stock.sector %}
+                                <span class="badge bg-light-green text-dark me-2">{{ stock.sector }}</span>
+                            {% endif %}
+                            {% if stock.exchange %}
+                                <span class="badge bg-secondary">{{ stock.exchange }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            {% if stock.current_price %}
+                                <div class="stock-price text-success-custom display-4">${{ stock.current_price|floatformat:2 }}</div>
+                                <small class="text-muted">Last Updated: {{ stock.last_updated|date:"M d, Y H:i" }}</small>
+                            {% else %}
+                                <div class="text-muted">Price not available</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Price Statistics -->
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>Price Statistics
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <h6 class="text-muted">Day Range</h6>
+                            <div class="fw-bold">
+                                ${{ price_stats.day_low|floatformat:2 }} - ${{ price_stats.day_high|floatformat:2 }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <h6 class="text-muted">Week Range</h6>
+                            <div class="fw-bold">
+                                ${{ price_stats.week_low|floatformat:2 }} - ${{ price_stats.week_high|floatformat:2 }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <h6 class="text-muted">Month Range</h6>
+                            <div class="fw-bold">
+                                ${{ price_stats.month_low|floatformat:2 }} - ${{ price_stats.month_high|floatformat:2 }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <h6 class="text-muted">52 Week Range</h6>
+                            <div class="fw-bold">
+                                ${{ price_stats.year_low|floatformat:2 }} - ${{ price_stats.year_high|floatformat:2 }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <div class="card bg-cream">
+                <div class="card-body text-center">
+                    {% if stock.current_price %}
+                        <a href="{% url 'buy_stock' stock.ticker %}" class="btn btn-primary-custom btn-lg me-3">
+                            <i class="fas fa-shopping-cart me-2"></i>Buy Stock
+                        </a>
+                    {% endif %}
+                    
+                    {% if not in_watchlist %}
+                        <a href="{% url 'add_to_watchlist' stock.ticker %}" class="btn btn-gold btn-lg">
+                            <i class="fas fa-eye me-2"></i>Add to Watchlist
+                        </a>
+                    {% else %}
+                        <span class="btn btn-outline-secondary btn-lg disabled">
+                            <i class="fas fa-check me-2"></i>In Watchlist
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Left Column -->
+        <div class="col-lg-8">
+            <!-- Price Chart -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i>Price Chart
+                    </h5>
+                    <div class="btn-group btn-group-sm mt-2" role="group" id="chartPeriodButtons">
+                        <button type="button" class="btn btn-outline-primary active" data-period="1w">1W</button>
+                        <button type="button" class="btn btn-outline-primary" data-period="1m">1M</button>
+                        <button type="button" class="btn btn-outline-primary" data-period="1y">1Y</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="priceChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+
+            <!-- Stock Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>Stock Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if stock.description %}
+                        <p>{{ stock.description }}</p>
+                    {% else %}
+                        <p class="text-muted">No description available.</p>
+                    {% endif %}
+                    
+                    <div class="row mt-3">
+                        <div class="col-sm-6">
+                            <strong>Exchange:</strong> {{ stock.exchange|default:"N/A" }}
+                        </div>
+                        <div class="col-sm-6">
+                            <strong>Currency:</strong> {{ stock.currency }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Your Holdings -->
+            {% if user_holdings %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-coins me-2"></i>Your Holdings
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Quantity</th>
+                                    <th>Buy Price</th>
+                                    <th>Current Value</th>
+                                    <th>P&L</th>
+                                    <th>Date Purchased</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for holding in user_holdings %}
+                                <tr>
+                                    <td>{{ holding.quantity }}</td>
+                                    <td>${{ holding.buy_price|floatformat:2 }}</td>
+                                    <td>${{ holding.current_value|floatformat:2 }}</td>
+                                    <td>
+                                        {% if holding.profit_loss > 0 %}
+                                            <span class="text-success">+${{ holding.profit_loss|floatformat:2 }}</span>
+                                        {% elif holding.profit_loss < 0 %}
+                                            <span class="text-danger">${{ holding.profit_loss|floatformat:2 }}</span>
+                                        {% else %}
+                                            <span class="text-muted">$0.00</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ holding.transaction_date|date:"M d, Y" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- News Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-newspaper me-2"></i>Latest News
+                        {% if news and news.0.is_general %}
+                            <small class="text-muted">(General Market News)</small>
+                        {% endif %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if news %}
+                        {% for article in news %}
+                        <div class="news-item mb-3 pb-3 {% if not forloop.last %}border-bottom{% endif %}">
+                            <h6 class="mb-2">
+                                <a href="{{ article.url }}" target="_blank" class="text-decoration-none">
+                                    {{ article.title|truncatechars:120 }}
+                                </a>
+                                {% if article.is_general %}
+                                    <span class="badge bg-secondary ms-2">Market News</span>
+                                {% endif %}
+                            </h6>
+                            <p class="text-muted small mb-2">{{ article.description|truncatewords:30 }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i>
+                                    {% if article.publishedDate %}
+                                        {{ article.publishedDate|date:"M d, Y H:i" }}
+                                    {% else %}
+                                        Recently
+                                    {% endif %}
+                                </small>
+                                <small class="text-muted">{{ article.source|default:"Unknown Source" }}</small>
+                            </div>
+                            {% if article.tags %}
+                                <div class="mt-2">
+                                    {% for tag in article.tags %}
+                                        <span class="badge bg-light text-dark me-1">{{ tag }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-newspaper fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No recent news available for {{ stock.ticker }}.</p>
+                            <p class="small text-muted">News updates may take some time to appear for newly added stocks.</p>
+                            <button class="btn btn-outline-primary btn-sm" onclick="location.reload()">
+                                <i class="fas fa-refresh me-1"></i>Refresh News
+                            </button>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>Quick Stats
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Total Shares Owned:</strong>
+                        <span class="float-end">{{ total_shares }}</span>
+                    </div>
+                    {% if stock.current_price and total_shares > 0 %}
+                    <div class="mb-3">
+                        <strong>Total Value:</strong>
+                        <span class="float-end text-success-custom">${{ total_value|floatformat:2 }}</span>
+                    </div>
+                    {% endif %}
+                    <hr>
+                    <div class="mb-3">
+                        <strong>Current Price:</strong>
+                        <span class="float-end">
+                            {% if stock.current_price %}
+                                ${{ stock.current_price|floatformat:2 }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </span>
+                    </div>
+                    {% if current_data %}
+                    <div class="mb-3">
+                        <strong>Day's High:</strong>
+                        <span class="float-end">${{ current_data.high|floatformat:2 }}</span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Day's Low:</strong>
+                        <span class="float-end">${{ current_data.low|floatformat:2 }}</span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Volume:</strong>
+                        <span class="float-end">{{ current_data.volume|floatformat:0 }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Market Hours -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-clock me-2"></i>Market Status
+                    </h5>
+                </div>
+                <div class="card-body text-center">
+                    <div id="marketStatus" class="badge bg-success fs-6">Market Open</div>
+                    <div class="mt-2">
+                        <small class="text-muted">9:30 AM - 4:00 PM EST</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Parse data from Django
+    const history1w = JSON.parse('{{ history_1w|escapejs }}');
+    const history1m = JSON.parse('{{ history_1m|escapejs }}');
+    const history1y = JSON.parse('{{ history_1y|escapejs }}');
+    
+    let chart;
+    
+    function createChart(data, label) {
+        const ctx = document.getElementById('priceChart').getContext('2d');
+        
+        if (chart) {
+            chart.destroy();
+        }
+        
+        const labels = data.map(item => new Date(item.date).toLocaleDateString());
+        const prices = data.map(item => item.close);
+        
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: label,
+                    data: prices,
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toFixed(2);
+                            }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            maxTicksLimit: 10
+                        }
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                }
+            }
+        });
+    }
+    
+    // Initial chart (1 week)
+    if (history1w.length > 0) {
+        createChart(history1w, 'Price (1 Week)');
+    }
+    
+    // Period buttons
+    document.querySelectorAll('[data-period]').forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove active class from all buttons
+            document.querySelectorAll('[data-period]').forEach(btn => btn.classList.remove('active'));
+            // Add active class to clicked button
+            this.classList.add('active');
+            
+            const period = this.getAttribute('data-period');
+            let data, label;
+            
+            switch(period) {
+                case '1w':
+                    data = history1w;
+                    label = 'Price (1 Week)';
+                    break;
+                case '1m':
+                    data = history1m;
+                    label = 'Price (1 Month)';
+                    break;
+                case '1y':
+                    data = history1y;
+                    label = 'Price (1 Year)';
+                    break;
+            }
+            
+            if (data && data.length > 0) {
+                createChart(data, label);
+            }
+        });
+    });
+    
+    // Market status (simple implementation)
+    function updateMarketStatus() {
+        const now = new Date();
+        const marketOpen = 9.5; // 9:30 AM
+        const marketClose = 16; // 4:00 PM
+        const currentHour = now.getHours() + now.getMinutes() / 60;
+        const isWeekday = now.getDay() >= 1 && now.getDay() <= 5;
+        
+        const statusElement = document.getElementById('marketStatus');
+        
+        if (isWeekday && currentHour >= marketOpen && currentHour < marketClose) {
+            statusElement.textContent = 'Market Open';
+            statusElement.className = 'badge bg-success fs-6';
+        } else {
+            statusElement.textContent = 'Market Closed';
+            statusElement.className = 'badge bg-danger fs-6';
+        }
+    }
+    
+    updateMarketStatus();
+});
+</script>
+{% endblock %}

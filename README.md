@@ -80,3 +80,4 @@ For any questions or feedback regarding the training program, please contact:
 - Connecting to a MySQL database using SQL Connector
 - Performing CRUD operations
 - Understanding SQL queries in Python
+- 

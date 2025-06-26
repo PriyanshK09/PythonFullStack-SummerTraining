@@ -1,0 +1,124 @@
+{% extends 'crud/base.html' %}
+{% block title %}Buy {{ stock.ticker }} - StockFolio{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <!-- Stock Info Card -->
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <h2 class="stock-ticker text-primary-green">{{ stock.ticker }}</h2>
+                    <h5 class="text-muted mb-3">{{ stock.name }}</h5>
+                    <div class="stock-price display-4 text-success-custom mb-2">
+                        ${{ stock.current_price|floatformat:2 }}
+                    </div>
+                    <small class="text-muted">Current Price per Share</small>
+                </div>
+            </div>
+
+            <!-- Buy Form -->
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-shopping-cart me-2"></i>Purchase Shares
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" id="buyForm">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label for="{{ form.quantity.id_for_label }}" class="form-label">Number of Shares</label>
+                            {{ form.quantity }}
+                            <div class="form-text">
+                                Available Balance: <strong class="text-success">${{ user.balance|floatformat:2 }}</strong>
+                            </div>
+                        </div>
+
+                        <!-- Cost Calculator -->
+                        <div class="card bg-light mb-4">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <strong>Price per Share:</strong>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        ${{ stock.current_price|floatformat:2 }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <strong>Quantity:</strong>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <span id="displayQuantity">0</span> shares
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <strong>Total Cost:</strong>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <strong class="text-primary-green">$<span id="totalCost">0.00</span></strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary-custom btn-lg" id="buyButton">
+                                <i class="fas fa-shopping-cart me-2"></i>Buy Shares
+                            </button>
+                            <a href="{% url 'stock_detail' stock.ticker %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Stock Detail
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const quantityInput = document.getElementById('{{ form.quantity.id_for_label }}');
+    const displayQuantity = document.getElementById('displayQuantity');
+    const totalCostElement = document.getElementById('totalCost');
+    const buyButton = document.getElementById('buyButton');
+    const pricePerShare = {{ stock.current_price }};
+    const availableBalance = {{ user.balance }};
+
+    function updateCost() {
+        const quantity = parseInt(quantityInput.value) || 0;
+        const totalCost = quantity * pricePerShare;
+        
+        displayQuantity.textContent = quantity;
+        totalCostElement.textContent = totalCost.toFixed(2);
+        
+        // Check if user can afford
+        if (totalCost > availableBalance) {
+            buyButton.disabled = true;
+            buyButton.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Insufficient Balance';
+            buyButton.classList.remove('btn-primary-custom');
+            buyButton.classList.add('btn-danger');
+        } else if (quantity > 0) {
+            buyButton.disabled = false;
+            buyButton.innerHTML = '<i class="fas fa-shopping-cart me-2"></i>Buy Shares';
+            buyButton.classList.remove('btn-danger');
+            buyButton.classList.add('btn-primary-custom');
+        } else {
+            buyButton.disabled = true;
+            buyButton.innerHTML = '<i class="fas fa-shopping-cart me-2"></i>Buy Shares';
+            buyButton.classList.remove('btn-danger');
+            buyButton.classList.add('btn-primary-custom');
+        }
+    }
+
+    quantityInput.addEventListener('input', updateCost);
+    updateCost(); // Initial calculation
+});
+</script>
+{% endblock %}
