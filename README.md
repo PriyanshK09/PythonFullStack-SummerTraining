@@ -37,25 +37,25 @@ For any questions or feedback regarding the training program, please contact:
 - Basic syntax and data types
 - Control structures (if statements, loops)
 
-## Day 2: Functions and Modules [17th July](/17-6-25/)
+## Day 2: Functions and Modules [17th June](/17-6-25/)
 - Defining and calling functions
 - Understanding scope and lifetime of variables
 - Importing and using modules
 - Creating custom modules
 
-## Day 3: Object-Oriented Programming [18th July](/18-6-25/)
+## Day 3: Object-Oriented Programming [18th June](/18-6-25/)
 - Classes and objects
 - Inheritance and polymorphism
 - Encapsulation and abstraction
 - Working with class methods and static methods
 
-## Day 4: GeekTrust MetroCard Question/Assignment Solution [19th July](/19-6-25/)
+## Day 4: GeekTrust MetroCard Question/Assignment Solution [19th June](/19-6-25/)
 - Understanding the problem statement
 - Designing the solution
 - Implementing the solution in Python
 - Testing and debugging the solution
 
-## Day 5: Introduction to SOLID Principles [20th July](/20-6-25/)
+## Day 5: Introduction to SOLID Principles [20th June](/20-6-25/)
 - Overview of SOLID principles
 - Single Responsibility Principle (SRP)
 - Open/Closed Principle (OCP)
@@ -63,12 +63,12 @@ For any questions or feedback regarding the training program, please contact:
 - Interface Segregation Principle (ISP)
 - Dependency Inversion Principle (DIP)
 
-## Day 6: Introduction to API Development [23rd July](/23-6-25/)
+## Day 6: Introduction to API Development [23rd June](/23-6-25/)
 - Understanding RESTful APIs
 - ReqRes API example
 - Making GET and POST requests
 
-## Day 7: Django Framework Basics [24th July](/24-6-25/)
+## Day 7: Django Framework Basics [24th June](/24-6-25/)
 - Introduction to Django
 - Setting up a Django project
 - Understanding Django apps
@@ -76,8 +76,17 @@ For any questions or feedback regarding the training program, please contact:
 - Made To Do List Application
 - Usage of Bootstrap in Django
 
-## Day 8: DB Operations in Python using SQL Connector [25th July](/25-6-25/)
+## Day 8: DB Operations in Python using SQL Connector [25th June](/25-6-25/)
 - Connecting to a MySQL database using SQL Connector
 - Performing CRUD operations
 - Understanding SQL queries in Python
-- 
+
+## Day 9: Django Revision and Advanced Topics [30th June](/30-6-25/)
+- Revisiting Django concepts
+- Advanced Django features (signals, middleware)
+- Django REST Framework introduction
+
+## Day 10: Django Revision Continued [1st July](/30-6-25/)
+- Revisiting Django REST Framework concepts
+- Implementing API endpoints
+- Testing APIs with Postman
