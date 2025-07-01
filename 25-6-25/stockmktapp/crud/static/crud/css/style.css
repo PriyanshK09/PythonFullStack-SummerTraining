@@ -701,3 +701,80 @@ body {
         padding-bottom: 0;
     }
 }
+
+/* --- Dashboard Welcome Header --- */
+.dashboard-header {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary-green);
+    letter-spacing: 0.02em;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dashboard-header i {
+    color: var(--accent-gold);
+    font-size: 2.2rem;
+    margin-right: 0.5rem;
+}
+
+.dashboard-subtitle {
+    color: var(--medium-gray);
+    font-size: 1.15rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+}
+
+/* --- Dashboard Stat Cards --- */
+.dashboard-stat-card {
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    background: var(--white);
+    padding: 1.5rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    border-left: 5px solid var(--primary-green);
+    transition: var(--transition);
+}
+
+.dashboard-stat-card:hover {
+    border-left-color: var(--accent-gold);
+    box-shadow: var(--shadow-lg);
+}
+
+.dashboard-stat-icon {
+    font-size: 2.2rem;
+    color: var(--primary-green);
+    opacity: 0.85;
+}
+
+.dashboard-stat-value {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--primary-green);
+}
+
+.dashboard-stat-label {
+    font-size: 0.95rem;
+    color: var(--medium-gray);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* --- Responsive adjustments for dashboard header --- */
+@media (max-width: 768px) {
+    .dashboard-header {
+        font-size: 1.7rem;
+    }
+    .dashboard-header i {
+        font-size: 1.5rem;
+    }
+    .dashboard-stat-value {
+        font-size: 1.2rem;
+    }
+}
