@@ -1,13 +1,23 @@
-<div class="card">
-  <h3>{{ name }}</h3>
-
-  <div class="card-price">
-    <p>{{ ticker }}</p>
-    <p>$ {{ curr_price }}</p>
+<div class="stock-card">
+  <div class="stock-card-header">
+    <div>
+      <span class="stock-ticker">{{ ticker }}</span>
+      <span class="stock-name">{{ name }}</span>
+    </div>
+    <span class="stock-price">${{ curr_price }}</span>
   </div>
-
-  <div class="card-buttons">
-    <button class="sell">Sell</button>
-    <button class="buy">Buy</button>
+  <div class="stock-card-actions">
+    <form method="post" action="{% url 'buy_stock' %}">
+      {% csrf_token %}
+      <input type="hidden" name="ticker" value="{{ ticker }}">
+      <input type="number" name="quantity" min="1" value="1" class="stock-qty-input" aria-label="Buy quantity" required>
+      <button class="stock-btn buy" type="submit">Buy</button>
+    </form>
+    <form method="post" action="{% url 'sell_stock' %}">
+      {% csrf_token %}
+      <input type="hidden" name="ticker" value="{{ ticker }}">
+      <input type="number" name="quantity" min="1" value="1" class="stock-qty-input" aria-label="Sell quantity" required>
+      <button class="stock-btn sell" type="submit">Sell</button>
+    </form>
   </div>
 </div>

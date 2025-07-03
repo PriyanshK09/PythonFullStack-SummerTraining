@@ -2,36 +2,19 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.views.decorators.http import require_POST, require_http_methods
+from .models import Stocks, Holding, Transaction, UserProfile
+from django.db import transaction as db_transaction
+from django.db import models
 
 # # Create your views here.
 import requests
 
 from .models import Stocks
-
-
-#
-
-# def fun(request) :
-#     page  = '''
-#     <!DOCTYPE html>
-# <html lang="en">
-# <head>
-#     <meta charset="UTF-8">
-#     <title>Title</title>
-# </head>
-# <body>
-# <h1>Stock Market App</h1>
-# <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis commodi dignissimos dolor, ducimus enim harum in ipsum iure laboriosam minus, natus odit officiis omnis optio quibusdam quo, sapiente sunt voluptatibus!</p>
-# <ul>
-#     <li>s1</li>
-#     <li>s2</li>
-#     <li>s3</li>
-# </ul>
-# </body>
-# </html>
-#     '''
-#     return  HttpResponse(page)
+from .forms import CustomUserCreationForm
 
 @login_required
 def index(request) :
@@ -120,10 +103,16 @@ def getData(request) :
 
 
 @login_required
-def stocks(request) :
-    stocks  = Stocks.objects.all()
-    context  =  {'data' :  stocks}
-    return render(request , 'market.html' ,  context)
+def stocks(request):
+    query = request.GET.get('q', '').strip()
+    if query:
+        stocks = Stocks.objects.filter(
+            models.Q(name__icontains=query) | models.Q(ticker__icontains=query)
+        )
+    else:
+        stocks = Stocks.objects.all()
+    context = {'data': stocks}
+    return render(request, 'market.html', context)
 
 
 def loginView(request):
@@ -143,3 +132,159 @@ def loginView(request):
 def logoutView(request) :
     logout(request)
     return redirect('login')
+
+@login_required
+def dashboard(request):
+    user_profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    holdings = Holding.objects.filter(user=request.user, shares__gt=0).select_related('stock')
+    transactions = Transaction.objects.filter(user=request.user).order_by('-date')[:10]
+
+    portfolio_value = sum(h.shares * h.stock.curr_price for h in holdings)
+    total_balance = user_profile.balance + portfolio_value
+
+    context = {
+        'username': request.user.username,
+        'balance': round(user_profile.balance, 2),
+        'portfolio_value': round(portfolio_value, 2),
+        'total_balance': round(total_balance, 2),
+        'holdings': [
+            {
+                'ticker': h.stock.ticker,
+                'name': h.stock.name,
+                'shares': h.shares,
+                'value': round(h.shares * h.stock.curr_price, 2)
+            } for h in holdings
+        ],
+        'recent_activity': [
+            {
+                'action': t.action,
+                'ticker': t.stock.ticker,
+                'amount': t.amount,
+                'price': round(t.price, 2),
+                'date': t.date.strftime('%Y-%m-%d %H:%M')
+            } for t in transactions
+        ]
+    }
+    return render(request, 'dashboard.html', context)
+
+def index(request):
+    if request.user.is_authenticated:
+        context = {
+            'username': request.user.username,
+            'portfolio_value': 15000,
+            'holdings': [
+                {'ticker': 'AAPL', 'shares': 10, 'value': 2000},
+                {'ticker': 'GOOGL', 'shares': 5, 'value': 1500},
+            ],
+            'recent_activity': [
+                {'action': 'Bought', 'ticker': 'AAPL', 'amount': 5, 'date': '2025-07-01'},
+                {'action': 'Sold', 'ticker': 'TSLA', 'amount': 2, 'date': '2025-06-30'},
+            ]
+        }
+        return render(request, 'dashboard.html', context)
+    else:
+        return render(request, 'index.html')
+
+def signup(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Account created successfully! Please log in.')
+            return redirect('login')
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'signup.html', {'form': form})
+
+@login_required
+@require_POST
+def buy_stock(request):
+    ticker = request.POST.get('ticker')
+    stock = Stocks.objects.get(ticker=ticker)
+    user_profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    try:
+        quantity = int(request.POST.get('quantity', 1))
+        if quantity < 1:
+            raise ValueError
+    except (ValueError, TypeError):
+        messages.error(request, "Please enter a valid quantity.")
+        return redirect('stocks')
+
+    total_price = stock.curr_price * quantity
+
+    if user_profile.balance < total_price:
+        messages.error(request, "Insufficient balance.")
+        return redirect('stocks')
+
+    with db_transaction.atomic():
+        holding, _ = Holding.objects.get_or_create(user=request.user, stock=stock)
+        holding.shares += quantity
+        holding.save()
+        user_profile.balance -= total_price
+        user_profile.save()
+        Transaction.objects.create(
+            user=request.user,
+            stock=stock,
+            action='BUY',
+            amount=quantity,
+            price=stock.curr_price
+        )
+    messages.success(request, f"You bought {quantity} share(s) of {ticker}!")
+    return redirect('stocks')
+
+@login_required
+@require_POST
+def sell_stock(request):
+    ticker = request.POST.get('ticker')
+    stock = Stocks.objects.get(ticker=ticker)
+    user_profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    try:
+        quantity = int(request.POST.get('quantity', 1))
+        if quantity < 1:
+            raise ValueError
+    except (ValueError, TypeError):
+        messages.error(request, "Please enter a valid quantity.")
+        return redirect('stocks')
+
+    try:
+        holding = Holding.objects.get(user=request.user, stock=stock)
+    except Holding.DoesNotExist:
+        messages.error(request, "You don't own this stock.")
+        return redirect('stocks')
+
+    if holding.shares < quantity:
+        messages.error(request, "Not enough shares to sell.")
+        return redirect('stocks')
+
+    with db_transaction.atomic():
+        holding.shares -= quantity
+        holding.save()
+        user_profile.balance += stock.curr_price * quantity
+        user_profile.save()
+        Transaction.objects.create(
+            user=request.user,
+            stock=stock,
+            action='SELL',
+            amount=quantity,
+            price=stock.curr_price
+        )
+    messages.success(request, f"You sold {quantity} share(s) of {ticker}!")
+    return redirect('stocks')
+
+@login_required
+@require_http_methods(["GET", "POST"])
+def add_balance(request):
+    user_profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    if request.method == "POST":
+        try:
+            amount = float(request.POST.get("amount", 0))
+            if amount > 0:
+                user_profile.balance += amount
+                user_profile.save()
+                messages.success(request, f"${amount} added to your balance!")
+            else:
+                messages.error(request, "Please enter a positive amount.")
+        except ValueError:
+            messages.error(request, "Invalid amount.")
+        return redirect('dashboard')
+    return render(request, "add_balance.html", {"balance": user_profile.balance})

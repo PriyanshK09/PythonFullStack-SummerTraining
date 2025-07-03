@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <link rel="stylesheet" href="{% static 'market.css' %}">
     <link rel="stylesheet" href="{% static 'form.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard.css' %}">
 
 </head>
 <body>
@@ -14,6 +15,30 @@
 {% block content %}
 
 {% endblock %}
-{% include 'components/footer.html' %}
+<footer class="site-footer">
+    <div class="footer-content">
+        <span>&copy; {{ year|default:2025 }} Investing.com &mdash; All rights reserved.</span>
+        <span class="footer-links">
+            <a href="{% url 'index' %}">Home</a>
+            <a href="{% url 'stocks' %}">Stocks</a>
+            <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+        </span>
+    </div>
+</footer>
+{% if messages %}
+  <div id="django-messages">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+  <script>
+    setTimeout(function() {
+      var msg = document.getElementById('django-messages');
+      if(msg) msg.style.display = 'none';
+    }, 3000);
+  </script>
+{% endif %}
 </body>
 </html>

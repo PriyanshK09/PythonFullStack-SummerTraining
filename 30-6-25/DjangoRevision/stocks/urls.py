@@ -18,12 +18,18 @@ from django.contrib import admin
 from django.contrib.auth import logout
 from django.urls import path
 from .views import index, getData ,  stocks , loginView , logoutView
+from . import views
 
 
 urlpatterns = [
-    path('',  index, name  = 'index'),
-    path('stocks/' ,stocks , name  = 'stocks') ,
-    path('data/',getData , name = 'data'  ),
-    path('login/' , loginView , name  = 'login') ,
-    path('logout/' ,  logoutView , name = 'logout')
+    path('', views.dashboard, name='index'),
+    path('stocks/', views.stocks, name='stocks'),
+    path('data/', views.getData, name='data'),
+    path('login/', views.loginView, name='login'),
+    path('logout/', views.logoutView, name='logout'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('signup/', views.signup, name='signup'),
+    path('buy/', views.buy_stock, name='buy_stock'),
+    path('sell/', views.sell_stock, name='sell_stock'),
+    path('add-balance/', views.add_balance, name='add_balance'),
 ]

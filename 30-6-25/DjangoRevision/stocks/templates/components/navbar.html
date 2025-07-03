@@ -1,13 +1,50 @@
-<div class="nav">
-    <h3>Investing.com</h3>
-    <ul>
-        <li><a href="{% url 'index' %}">Home</a></li>
-        <li><a href="{% url 'stocks' %}">Stocks</a></li>
-
+{% load static %}
+<div class="navbar">
+    <div class="navbar-brand">
+        <img src="{% static 'logo.png' %}" alt="Logo" class="navbar-logo" />
+        <span class="navbar-title">Investing.com</span>
+    </div>
+    <form class="navbar-search" method="get" action="{% url 'stocks' %}">
+        <input type="text" name="q" placeholder="Search stocks by name or ticker…" value="{{ request.GET.q|default_if_none:'' }}">
+        <button type="submit" aria-label="Search"><span>&#128269;</span></button>
+    </form>
+    <ul class="navbar-links">
+        <li><a href="{% url 'index' %}" class="{% if request.path == '/' %}active{% endif %}">Home</a></li>
+        <li><a href="{% url 'stocks' %}" class="{% if request.path == '/stocks/' %}active{% endif %}">Stocks</a></li>
         {% if request.user.is_authenticated %}
-            <li><a href="{% url 'logout' %}">Logout</a></li>
+            <li class="profile-menu-li">
+                <button class="profile-circle" id="profileCircle" type="button" aria-label="Profile">
+                    {{ request.user.username|slice:":1"|upper }}
+                </button>
+                <div class="profile-dropdown-menu" id="profileDropdown">
+                    <div class="profile-dropdown-username">
+                        {{ request.user.username }}
+                    </div>
+                    <a href="{% url 'dashboard' %}">Dashboard</a>
+                    <a href="{% url 'logout' %}">Logout</a>
+                </div>
+            </li>
         {% else %}
             <li><a href="{% url 'login' %}">Login</a></li>
+            <li><a href="{% url 'signup' %}">Sign Up</a></li>
         {% endif %}
     </ul>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const profileCircle = document.getElementById('profileCircle');
+    const dropdown = document.getElementById('profileDropdown');
+    if (profileCircle && dropdown) {
+        profileCircle.addEventListener('click', function(e) {
+            dropdown.classList.toggle('show');
+            e.stopPropagation();
+        });
+        document.addEventListener('click', function() {
+            dropdown.classList.remove('show');
+        });
+        dropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+});
+</script>

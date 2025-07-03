@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-hero">
+    <div class="dashboard-header">
+        <h2>Welcome, {{ username }}!</h2>
+        <a href="{% url 'add_balance' %}" class="add-balance-btn">+ Add Balance</a>
+    </div>
+    <div class="dashboard-summary">
+        <div class="dashboard-card">
+            <span class="dashboard-label">Cash Balance</span>
+            <span class="dashboard-value">${{ balance }}</span>
+        </div>
+        <div class="dashboard-card">
+            <span class="dashboard-label">Portfolio Value</span>
+            <span class="dashboard-value">${{ portfolio_value }}</span>
+        </div>
+        <div class="dashboard-card">
+            <span class="dashboard-label">Total Value</span>
+            <span class="dashboard-value">${{ total_balance }}</span>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-sections">
+    <div class="dashboard-section">
+        <h3>Your Holdings</h3>
+        {% if holdings %}
+        <table class="dashboard-table">
+            <thead>
+                <tr>
+                    <th>Ticker</th>
+                    <th>Name</th>
+                    <th>Shares</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for holding in holdings %}
+                <tr>
+                    <td>{{ holding.ticker }}</td>
+                    <td>{{ holding.name }}</td>
+                    <td>{{ holding.shares }}</td>
+                    <td>${{ holding.value }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="dashboard-empty">No holdings yet.</p>
+        {% endif %}
+    </div>
+    <div class="dashboard-section">
+        <h3>Recent Activity</h3>
+        {% if recent_activity %}
+        <ul class="dashboard-activity-list">
+            {% for activity in recent_activity %}
+            <li>
+                <span class="activity-date">{{ activity.date }}</span>
+                <span class="activity-action {% if activity.action == 'BUY' %}buy{% else %}sell{% endif %}">
+                    {{ activity.action }}
+                </span>
+                <span class="activity-details">
+                    {{ activity.amount }} {{ activity.ticker }} @ ${{ activity.price }}
+                </span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="dashboard-empty">No recent activity.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
