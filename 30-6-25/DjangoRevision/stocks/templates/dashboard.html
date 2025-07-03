@@ -5,71 +5,121 @@
 <div class="dashboard-hero">
     <div class="dashboard-header">
         <h2>Welcome, {{ username }}!</h2>
-        <a href="{% url 'add_balance' %}" class="add-balance-btn">+ Add Balance</a>
+        <a href="{% url 'add_balance' %}" class="add-balance-btn">
+            <span style="margin-right: 8px;">💰</span>Add Balance
+        </a>
     </div>
     <div class="dashboard-summary">
         <div class="dashboard-card">
-            <span class="dashboard-label">Cash Balance</span>
-            <span class="dashboard-value">${{ balance }}</span>
+            <div class="dashboard-label">Cash Balance</div>
+            <div class="dashboard-value">${{ balance }}</div>
         </div>
         <div class="dashboard-card">
-            <span class="dashboard-label">Portfolio Value</span>
-            <span class="dashboard-value">${{ portfolio_value }}</span>
+            <div class="dashboard-label">Portfolio Value</div>
+            <div class="dashboard-value">${{ portfolio_value }}</div>
         </div>
         <div class="dashboard-card">
-            <span class="dashboard-label">Total Value</span>
-            <span class="dashboard-value">${{ total_balance }}</span>
+            <div class="dashboard-label">Total Value</div>
+            <div class="dashboard-value">${{ total_balance }}</div>
         </div>
     </div>
 </div>
 
 <div class="dashboard-sections">
     <div class="dashboard-section">
-        <h3>Your Holdings</h3>
+        <h3>📊 Your Holdings</h3>
         {% if holdings %}
-        <table class="dashboard-table">
-            <thead>
-                <tr>
-                    <th>Ticker</th>
-                    <th>Name</th>
-                    <th>Shares</th>
-                    <th>Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for holding in holdings %}
-                <tr>
-                    <td>{{ holding.ticker }}</td>
-                    <td>{{ holding.name }}</td>
-                    <td>{{ holding.shares }}</td>
-                    <td>${{ holding.value }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div style="overflow-x: auto;">
+            <table class="dashboard-table">
+                <thead>
+                    <tr>
+                        <th>Ticker</th>
+                        <th>Company Name</th>
+                        <th>Shares</th>
+                        <th>Current Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for holding in holdings %}
+                    <tr>
+                        <td style="font-weight: 700; color: #667eea;">{{ holding.ticker }}</td>
+                        <td>{{ holding.name }}</td>
+                        <td style="text-align: center; font-weight: 600;">{{ holding.shares }}</td>
+                        <td style="font-weight: 700; color: #27ae60;">${{ holding.value }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         {% else %}
-        <p class="dashboard-empty">No holdings yet.</p>
+        <div class="dashboard-empty">
+            <div style="font-size: 3rem; margin-bottom: 16px;">📈</div>
+            <p>No holdings yet. Start investing to see your portfolio here!</p>
+        </div>
         {% endif %}
     </div>
+    
     <div class="dashboard-section">
-        <h3>Recent Activity</h3>
+        <h3>🔄 Recent Activity</h3>
         {% if recent_activity %}
         <ul class="dashboard-activity-list">
             {% for activity in recent_activity %}
             <li>
-                <span class="activity-date">{{ activity.date }}</span>
-                <span class="activity-action {% if activity.action == 'BUY' %}buy{% else %}sell{% endif %}">
-                    {{ activity.action }}
-                </span>
-                <span class="activity-details">
-                    {{ activity.amount }} {{ activity.ticker }} @ ${{ activity.price }}
-                </span>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span class="activity-date">{{ activity.date }}</span>
+                    <span class="activity-action {% if activity.action == 'BUY' %}buy{% else %}sell{% endif %}">
+                        {{ activity.action }}
+                    </span>
+                </div>
+                <div class="activity-details">
+                    {{ activity.amount }} shares of {{ activity.ticker }} @ ${{ activity.price }}
+                </div>
             </li>
             {% endfor %}
         </ul>
         {% else %}
-        <p class="dashboard-empty">No recent activity.</p>
+        <div class="dashboard-empty">
+            <div style="font-size: 3rem; margin-bottom: 16px;">📋</div>
+            <p>No recent activity. Make your first trade to get started!</p>
+        </div>
         {% endif %}
     </div>
 </div>
+
+<style>
+/* Additional inline styles for enhanced visual appeal */
+.dashboard-card {
+    position: relative;
+}
+
+.dashboard-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60px;
+    height: 60px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    transform: translate(20px, -20px);
+    transition: all 0.3s ease;
+}
+
+.dashboard-card:hover::after {
+    transform: translate(15px, -15px) scale(1.2);
+    background: rgba(255,255,255,0.2);
+}
+
+.dashboard-table tbody tr:nth-child(even) {
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.dashboard-activity-list li:nth-child(odd) {
+    background: rgba(102, 126, 234, 0.02);
+    border-radius: 8px;
+    margin: 0 -8px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+</style>
 {% endblock %}

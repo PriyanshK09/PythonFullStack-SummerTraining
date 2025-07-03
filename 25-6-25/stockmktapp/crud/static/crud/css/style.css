@@ -103,6 +103,7 @@ body {
     transition: var(--transition);
     background: var(--white);
     overflow: hidden;
+    margin-bottom: 2rem;
 }
 
 .card:hover {
@@ -111,11 +112,19 @@ body {
 }
 
 .card-header {
-    background-color: var(--light-gray);
-    border-bottom: 2px solid var(--border-color);
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green));
+    color: var(--white);
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0 !important;
+    border-bottom: none;
     font-weight: 600;
-    color: var(--dark-gray);
-    padding: 1.25rem;
+    padding: 1.25rem 1.5rem;
+}
+
+.card-header h5 {
+    margin: 0;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
 }
 
 .card-body {
@@ -148,26 +157,38 @@ body {
 }
 
 .btn-primary-custom {
-    background-color: var(--primary-green);
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green));
+    border: none;
     color: var(--white);
-    border: 2px solid var(--primary-green);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
 }
 
 .btn-primary-custom:hover {
-    background-color: var(--primary-green-dark);
-    border-color: var(--primary-green-dark);
+    background: linear-gradient(135deg, var(--primary-green-dark), var(--primary-green));
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
     color: var(--white);
 }
 
 .btn-gold {
-    background-color: var(--accent-gold);
+    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark));
+    border: none;
     color: var(--dark-gray);
-    border: 2px solid var(--accent-gold);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
 }
 
 .btn-gold:hover {
-    background-color: var(--accent-gold-dark);
-    border-color: var(--accent-gold-dark);
+    background: linear-gradient(135deg, var(--accent-gold-dark), #B8860B);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
     color: var(--dark-gray);
 }
 
@@ -247,9 +268,10 @@ body {
 /* ============ TABLES ============ */
 .table {
     background: var(--white);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--border-radius);
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
+    box-shadow: none;
+    margin-bottom: 0;
 }
 
 .table thead th {
@@ -258,19 +280,407 @@ body {
     font-weight: 600;
     border: none;
     padding: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.85rem;
 }
 
 .table tbody tr {
     transition: var(--transition);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .table tbody tr:hover {
     background-color: rgba(46, 139, 87, 0.05);
+    transform: scale(1.01);
 }
 
 .table tbody td {
     padding: 1rem;
-    border-color: var(--border-color);
+    border: none;
+    vertical-align: middle;
+}
+
+/* ============ DASHBOARD SPECIFIC STYLES ============ */
+.dashboard-header {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary-green);
+    letter-spacing: 0.02em;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dashboard-header i {
+    color: var(--accent-gold);
+    font-size: 2.2rem;
+    margin-right: 0.5rem;
+}
+
+.dashboard-subtitle {
+    color: var(--medium-gray);
+    font-size: 1.15rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+}
+
+/* ============ STAT CARDS ============ */
+.stat-card {
+    background: var(--white);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.stat-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary-green);
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green));
+    transition: var(--transition);
+}
+
+.stat-card:hover::before {
+    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark));
+    width: 6px;
+}
+
+.stat-card .stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--white);
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green));
+    flex-shrink: 0;
+    transition: var(--transition);
+}
+
+.stat-card:hover .stat-icon {
+    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark));
+    color: var(--dark-gray);
+    transform: scale(1.1);
+}
+
+.stat-card .stat-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.stat-card .stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--dark-gray);
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.stat-card .stat-label {
+    font-size: 0.875rem;
+    color: var(--medium-gray);
+    font-weight: 600;
+    margin: 0.25rem 0 0 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Specific stat card variations */
+.stat-card-balance .stat-icon {
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green));
+}
+
+.stat-card-portfolio .stat-icon {
+    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark));
+    color: var(--dark-gray);
+}
+
+.stat-card-holdings .stat-icon {
+    background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+}
+
+.stat-card-watchlist .stat-icon {
+    background: linear-gradient(135deg, #74B9FF, #0984E3);
+}
+
+/* ============ UPDATED STAT CARDS TO MATCH HOMEPAGE AESTHETIC ============ */
+.stat-card {
+    background: var(--white);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.stat-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary-green);
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green));
+    transition: var(--transition);
+}
+
+.stat-card:hover::before {
+    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark));
+    width: 6px;
+}
+
+.stat-card .stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--white);
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green));
+    flex-shrink: 0;
+    transition: var(--transition);
+}
+
+.stat-card:hover .stat-icon {
+    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark));
+    color: var(--dark-gray);
+    transform: scale(1.1);
+}
+
+.stat-card .stat-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.stat-card .stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--dark-gray);
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.stat-card .stat-label {
+    font-size: 0.875rem;
+    color: var(--medium-gray);
+    font-weight: 600;
+    margin: 0.25rem 0 0 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Specific stat card variations */
+.stat-card-balance .stat-icon {
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green));
+}
+
+.stat-card-portfolio .stat-icon {
+    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark));
+    color: var(--dark-gray);
+}
+
+.stat-card-holdings .stat-icon {
+    background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+}
+
+.stat-card-watchlist .stat-icon {
+    background: linear-gradient(135deg, #74B9FF, #0984E3);
+}
+
+/* ============ CARD IMPROVEMENTS ============ */
+.card {
+    border: none;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    background: var(--white);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green));
+    color: var(--white);
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0 !important;
+    border-bottom: none;
+    font-weight: 600;
+    padding: 1.25rem 1.5rem;
+}
+
+.card-header h5 {
+    margin: 0;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* ============ BUTTON IMPROVEMENTS ============ */
+.btn-primary-custom {
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green));
+    border: none;
+    color: var(--white);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-primary-custom:hover {
+    background: linear-gradient(135deg, var(--primary-green-dark), var(--primary-green));
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    color: var(--white);
+}
+
+.btn-gold {
+    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark));
+    border: none;
+    color: var(--dark-gray);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-gold:hover {
+    background: linear-gradient(135deg, var(--accent-gold-dark), #B8860B);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    color: var(--dark-gray);
+}
+
+.btn-outline-success-custom {
+    border: 2px solid var(--success-green);
+    color: var(--success-green);
+    background: transparent;
+    font-weight: 600;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.btn-outline-success-custom:hover {
+    background-color: var(--success-green);
+    color: var(--white);
+    transform: translateY(-1px);
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.btn-xs {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+/* ============ FORMS ============ */
+.form-control {
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    transition: var(--transition);
+    background-color: var(--white);
+}
+
+.form-control:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 0.2rem rgba(46, 139, 87, 0.25);
+    background-color: var(--white);
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--dark-gray);
+    margin-bottom: 0.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+/* ============ TABLES ============ */
+.table {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: none;
+    margin-bottom: 0;
+}
+
+.table thead th {
+    background-color: var(--primary-green);
+    color: var(--white);
+    font-weight: 600;
+    border: none;
+    padding: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.85rem;
+}
+
+.table tbody tr {
+    transition: var(--transition);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.table tbody tr:hover {
+    background-color: rgba(46, 139, 87, 0.05);
+    transform: scale(1.01);
+}
+
+.table tbody td {
+    padding: 1rem;
+    border: none;
     vertical-align: middle;
 }
 
@@ -279,8 +689,8 @@ body {
     font-family: 'Courier New', monospace;
     font-weight: 800;
     color: var(--primary-green);
-    font-size: 2rem;
-    letter-spacing: 0.1em;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
 }
 
 .stock-price {
@@ -528,6 +938,22 @@ body {
     }
 }
 
+@media (max-width: 576px) {
+    .stat-card {
+        margin-bottom: 1rem;
+    }
+    
+    .stat-card .d-flex {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .stat-card .stat-icon {
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+}
+
 /* ============ ANIMATIONS ============ */
 @keyframes fadeInUp {
     from {
@@ -641,140 +1067,443 @@ body {
     background: var(--white);
     border-radius: var(--border-radius);
     padding: 1rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
     transition: var(--transition);
     border-left: 4px solid var(--primary-green);
+    box-shadow: var(--shadow-sm);
 }
 
 .watchlist-item:hover {
     transform: translateX(5px);
     box-shadow: var(--shadow-md);
-}
-
-/* ============ SPECIAL SECTIONS ============ */
-.bg-cream {
-    background-color: #f8f9fa !important;
-}
-
-.text-success-custom {
-    color: var(--success-green) !important;
-}
-
-/* ============ DROPDOWN MENUS ============ */
-.dropdown-menu {
-    border: none;
-    box-shadow: var(--shadow-lg);
-    border-radius: var(--border-radius);
-}
-
-.dropdown-item {
-    padding: 0.75rem 1rem;
-    transition: var(--transition);
-}
-
-.dropdown-item:hover {
-    background-color: var(--light-gray);
-    color: var(--primary-green);
-}
-
-/* ============ PRICE STATISTICS ============ */
-.price-stats .col-md-3 {
-    border-right: 1px solid var(--border-color);
-    padding: 1rem;
-}
-
-.price-stats .col-md-3:last-child {
-    border-right: none;
-}
-
-@media (max-width: 768px) {
-    .price-stats .col-md-3 {
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
-        margin-bottom: 1rem;
-        padding-bottom: 1rem;
-    }
-    
-    .price-stats .col-md-3:last-child {
-        border-bottom: none;
-        margin-bottom: 0;
-        padding-bottom: 0;
-    }
-}
-
-/* --- Dashboard Welcome Header --- */
-.dashboard-header {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--primary-green);
-    letter-spacing: 0.02em;
-    margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.dashboard-header i {
-    color: var(--accent-gold);
-    font-size: 2.2rem;
-    margin-right: 0.5rem;
-}
-
-.dashboard-subtitle {
-    color: var(--medium-gray);
-    font-size: 1.15rem;
-    font-weight: 500;
-    margin-bottom: 2rem;
-}
-
-/* --- Dashboard Stat Cards --- */
-.dashboard-stat-card {
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-md);
-    background: var(--white);
-    padding: 1.5rem 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    border-left: 5px solid var(--primary-green);
-    transition: var(--transition);
-}
-
-.dashboard-stat-card:hover {
     border-left-color: var(--accent-gold);
-    box-shadow: var(--shadow-lg);
 }
 
-.dashboard-stat-icon {
-    font-size: 2.2rem;
-    color: var(--primary-green);
-    opacity: 0.85;
+/* ============ QUICK ACTIONS SECTION ============ */
+.bg-cream {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
+    border: 1px solid var(--border-color);
 }
 
-.dashboard-stat-value {
-    font-size: 1.7rem;
-    font-weight: 800;
-    color: var(--primary-green);
+/* ============ EMPTY STATE STYLING ============ */
+.text-center.py-4 {
+    padding: 3rem 1rem !important;
 }
 
-.dashboard-stat-label {
-    font-size: 0.95rem;
+.text-center.py-3 {
+    padding: 2rem 1rem !important;
+}
+
+.fa-3x {
     color: var(--medium-gray);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    opacity: 0.6;
 }
 
-/* --- Responsive adjustments for dashboard header --- */
+.fa-2x {
+    color: var(--medium-gray);
+    opacity: 0.6;
+}
+
+/* ============ RESPONSIVE IMPROVEMENTS ============ */
 @media (max-width: 768px) {
     .dashboard-header {
-        font-size: 1.7rem;
+        font-size: 2rem;
     }
+    
     .dashboard-header i {
+        font-size: 1.8rem;
+    }
+    
+    .stat-card .stat-value {
         font-size: 1.5rem;
     }
-    .dashboard-stat-value {
-        font-size: 1.2rem;
+    
+    .stat-card .stat-icon {
+        font-size: 2rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* ============ ANIMATION ENHANCEMENTS ============ */
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Stagger animation for stat cards */
+.stat-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.stat-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.stat-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.stat-card:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+/* ============ FORCE OVERRIDE STAT CARDS - REMOVE DUPLICATES AND FIX ============ */
+.stat-card {
+    background: var(--white) !important;
+    border-radius: var(--border-radius-lg) !important;
+    padding: 2rem 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+    box-shadow: var(--shadow-md) !important;
+    transition: var(--transition) !important;
+    border: 1px solid var(--border-color) !important;
+    overflow: hidden !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 1rem !important;
+}
+
+.stat-card:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+    border-color: var(--primary-green) !important;
+}
+
+.stat-card::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 4px !important;
+    height: 100% !important;
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green)) !important;
+    transition: var(--transition) !important;
+}
+
+.stat-card:hover::before {
+    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)) !important;
+    width: 6px !important;
+}
+
+.stat-card .stat-icon {
+    width: 60px !important;
+    height: 60px !important;
+    border-radius: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.5rem !important;
+    color: var(--white) !important;
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green)) !important;
+    flex-shrink: 0 !important;
+    transition: var(--transition) !important;
+}
+
+.stat-card:hover .stat-icon {
+    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)) !important;
+    color: var(--dark-gray) !important;
+    transform: scale(1.1) !important;
+}
+
+.stat-card .stat-content {
+    flex: 1 !important;
+    min-width: 0 !important;
+}
+
+.stat-card .stat-value {
+    font-size: 2rem !important;
+    font-weight: 800 !important;
+    color: var(--dark-gray) !important;
+    margin: 0 !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.02em !important;
+}
+
+.stat-card .stat-label {
+    font-size: 0.875rem !important;
+    color: var(--medium-gray) !important;
+    font-weight: 600 !important;
+    margin: 0.25rem 0 0 0 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* Force specific stat card icon colors */
+.stat-card-balance .stat-icon {
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green)) !important;
+}
+
+.stat-card-portfolio .stat-icon {
+    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)) !important;
+    color: var(--dark-gray) !important;
+}
+
+.stat-card-holdings .stat-icon {
+    background: linear-gradient(135deg, #FF6B6B, #FF8E8E) !important;
+}
+
+.stat-card-watchlist .stat-icon {
+    background: linear-gradient(135deg, #74B9FF, #0984E3) !important;
+}
+
+/* ============ MAIN CARD IMPROVEMENTS - FORCE OVERRIDE ============ */
+.main-card {
+    background: var(--white) !important;
+    border-radius: var(--border-radius-lg) !important;
+    box-shadow: var(--shadow-md) !important;
+    border: 1px solid var(--border-color) !important;
+    transition: var(--transition) !important;
+    overflow: hidden !important;
+    margin-bottom: 2rem !important;
+}
+
+.main-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+    border-color: var(--primary-green) !important;
+}
+
+.main-card .card-header {
+    background: var(--white) !important;
+    color: var(--dark-gray) !important;
+    border-bottom: 2px solid var(--border-color) !important;
+    border-radius: 0 !important;
+    font-weight: 700 !important;
+    padding: 1.5rem 2rem !important;
+    position: relative !important;
+}
+
+.main-card .card-header::before {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 2rem !important;
+    right: 2rem !important;
+    height: 2px !important;
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green)) !important;
+}
+
+.main-card .card-header h5 {
+    margin: 0 !important;
+    font-weight: 700 !important;
+    font-size: 1.25rem !important;
+    display: flex !important;
+    align-items: center !important;
+    color: var(--dark-gray) !important;
+}
+
+.main-card .card-header i {
+    color: var(--primary-green) !important;
+    margin-right: 0.75rem !important;
+    font-size: 1.1rem !important;
+}
+
+.main-card .card-body {
+    padding: 2rem !important;
+}
+
+/* ============ TABLE MODERN STYLING - FORCE OVERRIDE ============ */
+.table-modern {
+    background: var(--white) !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
+    margin-bottom: 0 !important;
+    border: none !important;
+}
+
+.table-modern thead th {
+    background: var(--light-gray) !important;
+    color: var(--dark-gray) !important;
+    font-weight: 700 !important;
+    border: none !important;
+    padding: 1.25rem 1rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    font-size: 0.8rem !important;
+    border-bottom: 2px solid var(--border-color) !important;
+}
+
+.table-modern tbody tr {
+    transition: var(--transition) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+.table-modern tbody tr:hover {
+    background-color: rgba(46, 139, 87, 0.02) !important;
+    transform: none !important;
+}
+
+.table-modern tbody td {
+    padding: 1.25rem 1rem !important;
+    border: none !important;
+    vertical-align: middle !important;
+    font-weight: 500 !important;
+}
+
+/* ============ WATCHLIST MODERN STYLING - FORCE OVERRIDE ============ */
+.watchlist-item-modern {
+    background: var(--white) !important;
+    border-radius: var(--border-radius) !important;
+    padding: 1.25rem !important;
+    margin-bottom: 1rem !important;
+    transition: var(--transition) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+.watchlist-item-modern:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: var(--shadow-md) !important;
+    border-color: var(--primary-green) !important;
+}
+
+.watchlist-item-modern:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* ============ MODERN BUTTON STYLING - FORCE OVERRIDE ============ */
+.btn-modern {
+    border-radius: var(--border-radius) !important;
+    font-weight: 600 !important;
+    padding: 0.75rem 1.5rem !important;
+    transition: var(--transition) !important;
+    border: 2px solid transparent !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    font-size: 0.9rem !important;
+    letter-spacing: 0.025em !important;
+}
+
+.btn-modern:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
+.btn-modern-primary {
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green)) !important;
+    color: var(--white) !important;
+    border-color: var(--primary-green) !important;
+}
+
+.btn-modern-primary:hover {
+    background: linear-gradient(135deg, var(--primary-green-dark), var(--primary-green)) !important;
+    color: var(--white) !important;
+    border-color: var(--primary-green-dark) !important;
+}
+
+.btn-modern-outline {
+    background: transparent !important;
+    color: var(--primary-green) !important;
+    border-color: var(--primary-green) !important;
+}
+
+.btn-modern-outline:hover {
+    background: var(--primary-green) !important;
+    color: var(--white) !important;
+    border-color: var(--primary-green) !important;
+}
+
+/* ============ QUICK ACTIONS MODERN STYLING - FORCE OVERRIDE ============ */
+.quick-actions-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--border-radius-lg) !important;
+    padding: 2rem !important;
+    text-align: center !important;
+    transition: var(--transition) !important;
+}
+
+.quick-actions-card:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
+.quick-actions-title {
+    color: var(--dark-gray) !important;
+    font-weight: 700 !important;
+    font-size: 1.25rem !important;
+    margin-bottom: 1.5rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+}
+
+/* ============ RESPONSIVE OVERRIDE ============ */
+@media (max-width: 768px) {
+    .stat-card {
+        padding: 1.5rem 1rem !important;
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 1rem !important;
+    }
+    
+    .stat-card .stat-icon {
+        margin-bottom: 0 !important;
+    }
+    
+    .stat-card .stat-value {
+        font-size: 1.75rem !important;
+    }
+    
+    .main-card .card-header,
+    .main-card .card-body {
+        padding: 1.5rem !important;
+    }
+    
+    .table-modern thead th,
+    .table-modern tbody td {
+        padding: 1rem 0.75rem !important;
+        font-size: 0.875rem !important;
+    }
+    
+    .watchlist-item-modern {
+        padding: 1rem !important;
+    }
+    
+    .quick-actions-card {
+        padding: 1.5rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .stat-card .stat-value {
+        font-size: 1.5rem !important;
+    }
+    
+    .stat-card .stat-icon {
+        width: 50px !important;
+        height: 50px !important;
+        font-size: 1.25rem !important;
+    }
+    
+    .main-card .card-header::before {
+        left: 1rem !important;
+        right: 1rem !important;
     }
 }
