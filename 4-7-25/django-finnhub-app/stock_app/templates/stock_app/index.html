@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live NASDAQ Prices</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Live NASDAQ Stock Prices</h1>
+        <div id="connection-status" class="status">Connecting...</div>
+        
+        <div class="stocks-grid">
+            <div class="stock-card" id="AAPL">
+                <h3>Apple Inc. (AAPL)</h3>
+                <div class="price">$--</div>
+                <div class="change">--</div>
+                <div class="timestamp">--</div>
+            </div>
+            
+            <div class="stock-card" id="GOOGL">
+                <h3>Alphabet Inc. (GOOGL)</h3>
+                <div class="price">$--</div>
+                <div class="change">--</div>
+                <div class="timestamp">--</div>
+            </div>
+            
+            <div class="stock-card" id="MSFT">
+                <h3>Microsoft Corp. (MSFT)</h3>
+                <div class="price">$--</div>
+                <div class="change">--</div>
+                <div class="timestamp">--</div>
+            </div>
+            
+            <div class="stock-card" id="AMZN">
+                <h3>Amazon.com Inc. (AMZN)</h3>
+                <div class="price">$--</div>
+                <div class="change">--</div>
+                <div class="timestamp">--</div>
+            </div>
+            
+            <div class="stock-card" id="TSLA">
+                <h3>Tesla Inc. (TSLA)</h3>
+                <div class="price">$--</div>
+                <div class="change">--</div>
+                <div class="timestamp">--</div>
+            </div>
+            
+            <div class="stock-card" id="NVDA">
+                <h3>NVIDIA Corp. (NVDA)</h3>
+                <div class="price">$--</div>
+                <div class="change">--</div>
+                <div class="timestamp">--</div>
+            </div>
+            
+            <div class="stock-card" id="META">
+                <h3>Meta Platforms Inc. (META)</h3>
+                <div class="price">$--</div>
+                <div class="change">--</div>
+                <div class="timestamp">--</div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{% static 'js/websocket.js' %}"></script>
+</body>
+</html>

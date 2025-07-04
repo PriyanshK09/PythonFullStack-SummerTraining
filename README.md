@@ -90,3 +90,18 @@ For any questions or feedback regarding the training program, please contact:
 - Revisiting Django REST Framework concepts
 - Implementing API endpoints
 - Testing APIs with Postman
+
+## Day 11: Django API Development [2nd July](/30-6-25/)
+- Building RESTful APIs with Django
+- Understanding serializers and viewsets
+- Implementing authentication and permissions
+
+## Day 12: Django API Development Continued [3rd July](/30-6-25/)
+- Advanced API features (pagination, filtering)
+- Testing APIs with Django's test client
+- Deploying Django applications
+
+## Day 13: Introduction to Websockets [4th July](/4-7-25/)
+- Understanding Websockets and their use cases
+- Setting up a Websocket server with Django Channels
+- Implementing real-time communication in web applications
