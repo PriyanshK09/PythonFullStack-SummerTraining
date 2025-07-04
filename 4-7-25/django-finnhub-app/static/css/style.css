@@ -114,6 +114,60 @@ h1 {
     padding-bottom: 16px;
     border-bottom: 1px solid rgba(255,255,255,0.1);
     font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    pointer-events: auto !important; /* Ensure headers are always clickable */
+}
+
+.stock-card h3:hover {
+    color: #60a5fa;
+    transform: translateX(2px);
+}
+
+.stock-card h3::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #60a5fa, #3b82f6);
+    transition: width 0.3s ease;
+}
+
+.stock-card:hover h3::after {
+    width: 100%;
+}
+
+/* When cards are disabled, keep headers interactive */
+.stock-card[style*="pointer-events: none"] h3 {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    opacity: 1 !important;
+    color: #e2e8f0 !important;
+}
+
+.stock-card[style*="pointer-events: none"] h3:hover {
+    color: #60a5fa !important;
+    transform: translateX(2px);
+}
+
+/* Add a subtle indicator that company names are clickable even when market is closed */
+.stock-card[style*="pointer-events: none"] h3::before {
+    content: '👆';
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.6;
+    font-size: 0.8rem;
+    animation: pulse-click 2s infinite;
+}
+
+@keyframes pulse-click {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
 }
 
 .price {
@@ -385,6 +439,223 @@ h1 {
     font-family: 'JetBrains Mono', monospace;
 }
 
+/* Company Profile Popup Styles */
+.company-profile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(20px);
+    z-index: 1001;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.company-profile-content {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 24px;
+    padding: 32px;
+    width: 100%;
+    max-width: 700px;
+    max-height: 80vh;
+    overflow-y: auto;
+    text-align: left;
+    box-shadow: 0 32px 64px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: slideIn 0.4s ease-out;
+    position: relative;
+}
+
+.company-profile-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+}
+
+.company-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.company-logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.company-title {
+    flex: 1;
+    margin-left: 16px;
+}
+
+.company-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: -0.01em;
+}
+
+.company-ticker {
+    font-size: 1rem;
+    color: #60a5fa;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    margin: 4px 0 0 0;
+}
+
+.company-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.detail-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.detail-label {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-weight: 500;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.detail-value {
+    font-size: 1rem;
+    color: #ffffff;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.detail-value.large {
+    font-size: 1.25rem;
+    color: #22c55e;
+}
+
+.company-description {
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 16px;
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    position: relative;
+    backdrop-filter: blur(10px);
+}
+
+.company-description::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%);
+    border-radius: 2px;
+}
+
+.company-description h4 {
+    color: #60a5fa;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    font-family: 'Inter', sans-serif;
+}
+
+.company-description p {
+    color: #e2e8f0;
+    line-height: 1.6;
+    font-size: 0.95rem;
+    margin: 0;
+    padding-left: 16px;
+}
+
+.company-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.metric-item {
+    background: rgba(34, 197, 94, 0.1);
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.metric-label {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-weight: 500;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.metric-value {
+    font-size: 1rem;
+    color: #22c55e;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top: 3px solid #60a5fa;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error-message {
+    text-align: center;
+    color: #ef4444;
+    font-size: 1rem;
+    padding: 40px;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -413,6 +684,42 @@ h1 {
     }
 }
 
+/* Navigation Links Styles */
+.nav-links {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    text-decoration: none;
+    color: #94a3b8;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.nav-link.active {
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+    color: #ffffff;
+    border-color: #60a5fa;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     body {
@@ -437,7 +744,8 @@ h1 {
         font-size: 2.25rem;
     }
     
-    .market-closed-content {
+    .market-closed-content,
+    .company-profile-content {
         padding: 28px 24px;
         margin: 16px;
         max-width: 95%;
@@ -461,6 +769,20 @@ h1 {
     .next-session p {
         font-size: 0.9rem;
     }
+    
+    .company-details {
+        grid-template-columns: 1fr;
+    }
+    
+    .company-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .company-title {
+        margin-left: 0;
+        margin-top: 12px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -468,7 +790,8 @@ h1 {
         font-size: 2rem;
     }
     
-    .market-closed-content {
+    .market-closed-content,
+    .company-profile-content {
         padding: 24px 20px;
         margin: 12px;
     }
@@ -497,25 +820,13 @@ h1 {
         height: 32px;
         font-size: 16px;
     }
+    
+    .company-metrics {
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
 /* Additional premium touches */
-.stock-card h3::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #60a5fa, #3b82f6);
-    transition: width 0.3s ease;
-}
-
-.stock-card:hover h3::after {
-    width: 100%;
-}
-
-/* Loading state for prices */
 .price:empty::before {
     content: '---';
     opacity: 0.4;
@@ -535,4 +846,22 @@ h1 {
 .close-button:focus {
     outline: 2px solid #60a5fa;
     outline-offset: 2px;
+}
+
+/* Scrollbar styling for popups */
+.company-profile-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.company-profile-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.company-profile-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(96, 165, 250, 0.4) 0%, rgba(96, 165, 250, 0.2) 100%);
+    border-radius: 3px;
+}
+
+.company-profile-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, rgba(96, 165, 250, 0.6) 0%, rgba(96, 165, 250, 0.4) 100%);
 }

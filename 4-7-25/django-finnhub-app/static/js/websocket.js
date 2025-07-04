@@ -5,6 +5,7 @@ class StockWebSocket {
         this.stockPrices = {};
         this.isMarketOpen = false;
         this.connect();
+        this.setupCompanyClickHandlers();
     }
 
     connect() {
@@ -39,6 +40,170 @@ class StockWebSocket {
             console.error('WebSocket error:', error);
             this.updateConnectionStatus('Connection Error', 'disconnected');
         };
+    }
+
+    setupCompanyClickHandlers() {
+        // Add click handlers to company names
+        document.querySelectorAll('.stock-card h3').forEach(header => {
+            header.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent event bubbling
+                const stockCard = e.target.closest('.stock-card');
+                const symbol = stockCard.id;
+                this.showCompanyProfile(symbol);
+            });
+            
+            // Ensure header stays clickable even when card is disabled
+            header.style.pointerEvents = 'auto';
+            header.style.cursor = 'pointer';
+        });
+    }
+
+    async showCompanyProfile(symbol) {
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'company-profile-overlay';
+        overlay.innerHTML = `
+            <div class="company-profile-content">
+                <button class="close-button" onclick="this.closest('.company-profile-overlay').remove()">×</button>
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        // Add click outside to close
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                overlay.remove();
+            }
+        });
+
+        // Add escape key to close
+        const escapeHandler = (e) => {
+            if (e.key === 'Escape' && document.querySelector('.company-profile-overlay')) {
+                overlay.remove();
+                document.removeEventListener('keydown', escapeHandler);
+            }
+        };
+        document.addEventListener('keydown', escapeHandler);
+
+        // Fetch company data
+        try {
+            const response = await fetch(`https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=d1jl9lhr01qvg5gv8gk0d1jl9lhr01qvg5gv8gkg`);
+            const data = await response.json();
+            
+            if (response.ok && data.name) {
+                this.renderCompanyProfile(overlay, data, symbol);
+            } else {
+                this.renderErrorMessage(overlay, 'Company profile not found');
+            }
+        } catch (error) {
+            console.error('Error fetching company profile:', error);
+            this.renderErrorMessage(overlay, 'Failed to load company profile');
+        }
+    }
+
+    renderCompanyProfile(overlay, data, symbol) {
+        const content = overlay.querySelector('.company-profile-content');
+        
+        // Format market cap
+        const formatMarketCap = (value) => {
+            if (value >= 1e12) return `$${(value / 1e12).toFixed(2)}T`;
+            if (value >= 1e9) return `$${(value / 1e9).toFixed(2)}B`;
+            if (value >= 1e6) return `$${(value / 1e6).toFixed(2)}M`;
+            return `$${value?.toLocaleString() || 'N/A'}`;
+        };
+
+        // Format employee count
+        const formatEmployees = (count) => {
+            if (count >= 1e6) return `${(count / 1e6).toFixed(1)}M`;
+            if (count >= 1e3) return `${(count / 1e3).toFixed(1)}K`;
+            return count?.toLocaleString() || 'N/A';
+        };
+
+        content.innerHTML = `
+            <button class="close-button" onclick="this.closest('.company-profile-overlay').remove()">×</button>
+            
+            <div class="company-header">
+                <img src="${data.logo}" alt="${data.name} logo" class="company-logo" onerror="this.style.display='none'">
+                <div class="company-title">
+                    <h2 class="company-name">${data.name}</h2>
+                    <p class="company-ticker">${symbol}</p>
+                </div>
+            </div>
+
+            <div class="company-details">
+                <div class="detail-item">
+                    <div class="detail-label">Market Cap</div>
+                    <div class="detail-value large">${formatMarketCap(data.marketCapitalization)}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Industry</div>
+                    <div class="detail-value">${data.finnhubIndustry || 'N/A'}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Country</div>
+                    <div class="detail-value">${data.country || 'N/A'}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Currency</div>
+                    <div class="detail-value">${data.currency || 'N/A'}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Exchange</div>
+                    <div class="detail-value">${data.exchange || 'N/A'}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">IPO Date</div>
+                    <div class="detail-value">${data.ipo || 'N/A'}</div>
+                </div>
+            </div>
+
+            ${data.weburl ? `
+            <div class="company-metrics">
+                <div class="metric-item">
+                    <div class="metric-label">Website</div>
+                    <div class="metric-value">
+                        <a href="${data.weburl}" target="_blank" style="color: #60a5fa; text-decoration: none;">
+                            ${data.weburl.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+                        </a>
+                    </div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Employees</div>
+                    <div class="metric-value">${formatEmployees(data.employeeTotal)}</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Shares Outstanding</div>
+                    <div class="metric-value">${data.shareOutstanding ? `${(data.shareOutstanding / 1e6).toFixed(1)}M` : 'N/A'}</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Phone</div>
+                    <div class="metric-value">${data.phone || 'N/A'}</div>
+                </div>
+            </div>
+            ` : ''}
+
+            ${data.description ? `
+            <div class="company-description">
+                <h4>📋 About ${data.name}</h4>
+                <p>${data.description}</p>
+            </div>
+            ` : ''}
+        `;
+    }
+
+    renderErrorMessage(overlay, message) {
+        const content = overlay.querySelector('.company-profile-content');
+        content.innerHTML = `
+            <button class="close-button" onclick="this.closest('.company-profile-overlay').remove()">×</button>
+            <div class="error-message">
+                <h3>❌ Error</h3>
+                <p>${message}</p>
+            </div>
+        `;
     }
 
     handleMessage(data) {
@@ -79,7 +244,7 @@ class StockWebSocket {
         // Show market closed overlay
         this.createMarketClosedOverlay(marketData);
         
-        // Hide stock prices
+        // Hide stock prices but keep headers clickable
         this.hideStockPrices();
     }
 
@@ -167,6 +332,14 @@ class StockWebSocket {
         stockCards.forEach(card => {
             card.style.opacity = '0.5';
             card.style.pointerEvents = 'none';
+            
+            // Keep company name headers clickable
+            const header = card.querySelector('h3');
+            if (header) {
+                header.style.pointerEvents = 'auto';
+                header.style.cursor = 'pointer';
+                header.style.opacity = '1';
+            }
         });
     }
 

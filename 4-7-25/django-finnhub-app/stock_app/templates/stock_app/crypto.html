@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Crypto Prices - Binance</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/crypto.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Live Crypto Prices - Binance</h1>
+        <div class="nav-links">
+            <a href="/" class="nav-link">📈 Stocks</a>
+            <a href="/crypto" class="nav-link active">₿ Crypto</a>
+        </div>
+        <div id="connection-status" class="status">Connecting...</div>
+        
+        <div class="crypto-grid">
+            <div class="crypto-card" id="BINANCE:BTCUSDT">
+                <h3>Bitcoin (BTC/USDT)</h3>
+                <div class="price">$--</div>
+                <div class="change">--</div>
+                <div class="timestamp">--</div>
+            </div>
+            
+            <div class="crypto-card" id="BINANCE:ETHUSDT">
+                <h3>Ethereum (ETH/USDT)</h3>
+                <div class="price">$--</div>
+                <div class="change">--</div>
+                <div class="timestamp">--</div>
+            </div>
+            
+            <div class="crypto-card" id="BINANCE:BNBUSDT">
+                <h3>BNB (BNB/USDT)</h3>
+                <div class="price">$--</div>
+                <div class="change">--</div>
+                <div class="timestamp">--</div>
+            </div>
+            
+            <div class="crypto-card" id="BINANCE:XRPUSDT">
+                <h3>XRP (XRP/USDT)</h3>
+                <div class="price">$--</div>
+                <div class="change">--</div>
+                <div class="timestamp">--</div>
+            </div>
+            
+            <div class="crypto-card" id="BINANCE:ADAUSDT">
+                <h3>Cardano (ADA/USDT)</h3>
+                <div class="price">$--</div>
+                <div class="change">--</div>
+                <div class="timestamp">--</div>
+            </div>
+            
+            <div class="crypto-card" id="BINANCE:SOLUSDT">
+                <h3>Solana (SOL/USDT)</h3>
+                <div class="price">$--</div>
+                <div class="change">--</div>
+                <div class="timestamp">--</div>
+            </div>
+            
+            <div class="crypto-card" id="BINANCE:MATICUSDT">
+                <h3>Polygon (MATIC/USDT)</h3>
+                <div class="price">$--</div>
+                <div class="change">--</div>
+                <div class="timestamp">--</div>
+            </div>
+            
+            <div class="crypto-card" id="BINANCE:DOGEUSDT">
+                <h3>Dogecoin (DOGE/USDT)</h3>
+                <div class="price">$--</div>
+                <div class="change">--</div>
+                <div class="timestamp">--</div>
+            </div>
+            
+            <div class="crypto-card" id="BINANCE:DOTUSDT">
+                <h3>Polkadot (DOT/USDT)</h3>
+                <div class="price">$--</div>
+                <div class="change">--</div>
+                <div class="timestamp">--</div>
+            </div>
+            
+            <div class="crypto-card" id="BINANCE:AVAXUSDT">
+                <h3>Avalanche (AVAX/USDT)</h3>
+                <div class="price">$--</div>
+                <div class="change">--</div>
+                <div class="timestamp">--</div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{% static 'js/crypto.js' %}"></script>
+</body>
+</html>
