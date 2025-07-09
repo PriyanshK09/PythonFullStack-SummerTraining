@@ -105,3 +105,18 @@ For any questions or feedback regarding the training program, please contact:
 - Understanding Websockets and their use cases
 - Setting up a Websocket server with Django Channels
 - Implementing real-time communication in web applications
+
+## Day 14: API Development RESTful APIs [7th July](/7-7-25/)
+- Building RESTful APIs with Django REST Framework
+- Understanding API versioning
+- Implementing API documentation with Swagger
+
+## Day 15: API Development RESTful APIs Continued [8th July](/7-7-25/)
+- Advanced API features (throttling, caching)
+- Testing APIs with Django's test client
+- Deploying Django applications with Docker
+
+## Day 16: Lazy vs Eager Loading [9th July](/9-7-25/)
+- Understanding Lazy vs Eager Loading
+- Implementing Lazy Loading in Django
+- Implementing Eager Loading in Django
