@@ -18,46 +18,76 @@
     <!-- Statistics Cards -->
     <div class="row g-4 mb-4">
         <div class="col-lg-3 col-md-6">
-            <div class="stat-card stat-card-balance fade-in-up">
+            <div class="stat-card stat-card-balance fade-in-up h-100">
                 <div class="stat-icon">
                     <i class="fas fa-wallet"></i>
                 </div>
                 <div class="stat-content">
-                    <div class="stat-value">${{ balance|floatformat:2 }}</div>
+                    <div class="stat-value">${{ user.balance|floatformat:2 }}</div>
                     <div class="stat-label">Available Balance</div>
+                    <div class="mt-3">
+                        <a href="{% url 'add_money' %}" class="btn btn-sm btn-gold">
+                            <i class="fas fa-plus me-1"></i>Add Money
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-lg-3 col-md-6">
-            <div class="stat-card stat-card-portfolio fade-in-up">
+            <div class="stat-card stat-card-portfolio fade-in-up h-100">
                 <div class="stat-icon">
                     <i class="fas fa-chart-pie"></i>
                 </div>
                 <div class="stat-content">
                     <div class="stat-value">${{ portfolio_value|floatformat:2 }}</div>
                     <div class="stat-label">Portfolio Value</div>
+                    <div class="mt-3">
+                        <a href="{% url 'portfolio' %}" class="btn btn-sm btn-outline-primary-custom">
+                            <i class="fas fa-briefcase me-1"></i>View Portfolio
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-lg-3 col-md-6">
-            <div class="stat-card stat-card-holdings fade-in-up">
+            <div class="stat-card stat-card-holdings fade-in-up h-100">
                 <div class="stat-icon">
                     <i class="fas fa-coins"></i>
                 </div>
                 <div class="stat-content">
                     <div class="stat-value">{{ user_stocks.count }}</div>
                     <div class="stat-label">Holdings</div>
+                    <div class="mt-3">
+                        {% if user_stocks.count > 0 %}
+                            <a href="{% url 'portfolio' %}" class="btn btn-sm btn-outline-success-custom">
+                                <i class="fas fa-list me-1"></i>View All
+                            </a>
+                        {% else %}
+                            <a href="{% url 'search_stocks' %}" class="btn btn-sm btn-outline-success-custom">
+                                <i class="fas fa-search me-1"></i>Buy Stocks
+                            </a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-lg-3 col-md-6">
-            <div class="stat-card stat-card-watchlist fade-in-up">
+            <div class="stat-card stat-card-watchlist fade-in-up h-100">
                 <div class="stat-icon">
                     <i class="fas fa-eye"></i>
                 </div>
                 <div class="stat-content">
                     <div class="stat-value">{{ watchlist.count }}</div>
                     <div class="stat-label">Watchlist</div>
+                    <div class="mt-3">
+                        {% if watchlist.count > 0 %}
+                            <small class="text-muted">Tracking {{ watchlist.count }} stock{{ watchlist.count|pluralize }}</small>
+                        {% else %}
+                            <a href="{% url 'search_stocks' %}" class="btn btn-sm btn-outline-info">
+                                <i class="fas fa-plus me-1"></i>Add Stocks
+                            </a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -66,15 +96,15 @@
     <div class="row g-4">
         <!-- Recent Holdings -->
         <div class="col-lg-8">
-            <div class="card main-card fade-in-up">
+            <div class="card main-card fade-in-up h-100">
                 <div class="card-header">
                     <h5 class="mb-0">
                         <i class="fas fa-briefcase"></i>Your Holdings
                     </h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                     {% if user_stocks %}
-                        <div class="table-responsive">
+                        <div class="table-responsive flex-grow-1">
                             <table class="table table-modern">
                                 <thead>
                                     <tr>
@@ -139,13 +169,15 @@
                         </div>
                         {% endif %}
                     {% else %}
-                        <div class="text-center py-4">
+                        <div class="text-center py-4 flex-grow-1 d-flex flex-column justify-content-center">
                             <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
                             <h5 class="text-muted">No holdings yet</h5>
                             <p class="text-muted">Start building your portfolio by searching and buying stocks.</p>
-                            <a href="{% url 'search_stocks' %}" class="btn btn-modern btn-modern-primary">
-                                <i class="fas fa-search me-2"></i>Search Stocks
-                            </a>
+                            <div>
+                                <a href="{% url 'search_stocks' %}" class="btn btn-modern btn-modern-primary">
+                                    <i class="fas fa-search me-2"></i>Search Stocks
+                                </a>
+                            </div>
                         </div>
                     {% endif %}
                 </div>
@@ -154,41 +186,51 @@
 
         <!-- Watchlist -->
         <div class="col-lg-4">
-            <div class="card main-card fade-in-up">
+            <div class="card main-card fade-in-up h-100">
                 <div class="card-header">
                     <h5 class="mb-0">
                         <i class="fas fa-eye"></i>Watchlist
                     </h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                     {% if watchlist %}
-                        {% for item in watchlist|slice:":8" %}
-                        <div class="watchlist-item-modern">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <strong class="stock-ticker d-block">{{ item.stock.ticker }}</strong>
-                                    <small class="text-muted">{{ item.stock.name|truncatechars:20 }}</small>
-                                </div>
-                                <div class="text-end">
-                                    {% if item.stock.current_price %}
-                                        <div class="fw-bold text-success mb-1">${{ item.stock.current_price|floatformat:2 }}</div>
-                                    {% else %}
-                                        <div class="text-muted mb-1">N/A</div>
-                                    {% endif %}
-                                    <a href="{% url 'stock_detail' item.stock.ticker %}" class="btn btn-modern btn-modern-outline btn-sm">
-                                        <i class="fas fa-info-circle"></i>
-                                    </a>
+                        <div class="flex-grow-1">
+                            {% for item in watchlist|slice:":8" %}
+                            <div class="watchlist-item-modern">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong class="stock-ticker d-block">{{ item.stock.ticker }}</strong>
+                                        <small class="text-muted">{{ item.stock.name|truncatechars:20 }}</small>
+                                    </div>
+                                    <div class="text-end">
+                                        {% if item.stock.current_price %}
+                                            <div class="fw-bold text-success mb-1">${{ item.stock.current_price|floatformat:2 }}</div>
+                                        {% else %}
+                                            <div class="text-muted mb-1">N/A</div>
+                                        {% endif %}
+                                        <a href="{% url 'stock_detail' item.stock.ticker %}" class="btn btn-modern btn-modern-outline btn-sm">
+                                            <i class="fas fa-info-circle"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
+                        
+                        {% if watchlist.count > 8 %}
+                        <div class="text-center mt-3">
+                            <small class="text-muted">And {{ watchlist.count|add:"-8" }} more stocks</small>
+                        </div>
+                        {% endif %}
                     {% else %}
-                        <div class="text-center py-3">
+                        <div class="text-center py-3 flex-grow-1 d-flex flex-column justify-content-center">
                             <i class="fas fa-eye-slash fa-2x text-muted mb-2"></i>
                             <p class="text-muted mb-2">Your watchlist is empty</p>
-                            <a href="{% url 'search_stocks' %}" class="btn btn-modern btn-modern-outline btn-sm">
-                                <i class="fas fa-plus me-1"></i>Add Stocks
-                            </a>
+                            <div>
+                                <a href="{% url 'search_stocks' %}" class="btn btn-modern btn-modern-outline btn-sm">
+                                    <i class="fas fa-plus me-1"></i>Add Stocks
+                                </a>
+                            </div>
                         </div>
                     {% endif %}
                 </div>
@@ -209,6 +251,12 @@
                     </a>
                     <a href="{% url 'portfolio' %}" class="btn btn-modern btn-modern-outline">
                         <i class="fas fa-briefcase me-2"></i>Full Portfolio
+                    </a>
+                    <a href="{% url 'add_money' %}" class="btn btn-gold">
+                        <i class="fas fa-wallet me-2"></i>Add Money
+                    </a>
+                    <a href="{% url 'wallet' %}" class="btn btn-outline-primary-custom">
+                        <i class="fas fa-eye me-2"></i>View Wallet
                     </a>
                 </div>
             </div>

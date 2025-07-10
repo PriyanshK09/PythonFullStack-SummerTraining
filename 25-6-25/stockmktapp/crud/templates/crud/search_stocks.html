@@ -3,35 +3,53 @@
 
 {% block content %}
 <div class="container py-4">
+    <!-- Search Header -->
     <div class="row mb-4">
         <div class="col-lg-12">
-            <h1 class="fw-bold text-primary-green">
-                <i class="fas fa-search me-2"></i>Search Stocks
+            <h1 class="dashboard-header fade-in-up">
+                <i class="fas fa-search"></i>Search Stocks
             </h1>
-            <p class="text-muted">Find and explore stocks to add to your portfolio</p>
+            <p class="dashboard-subtitle fade-in-up">
+                Find and explore stocks to add to your portfolio
+            </p>
         </div>
     </div>
 
-    <!-- Search Form -->
-    <div class="row mb-4">
-        <div class="col-lg-6 mx-auto">
-            <div class="card">
+    <!-- Enhanced Search Form -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card main-card search-card fade-in-up">
                 <div class="card-body">
-                    <form method="get" action="{% url 'search_stocks' %}">
-                        <div class="search-box">
-                            <i class="fas fa-search search-icon"></i>
+                    <form method="get" action="{% url 'search_stocks' %}" class="search-form-modern">
+                        <div class="search-input-container">
+                            <div class="search-icon-wrapper">
+                                <i class="fas fa-search search-icon"></i>
+                            </div>
                             <input type="text" 
                                    name="q" 
-                                   class="form-control" 
-                                   placeholder="Enter stock ticker (e.g., AAPL, GOOGL)" 
+                                   class="form-control search-input-modern" 
+                                   placeholder="Enter stock ticker (e.g., AAPL, GOOGL, MSFT)" 
                                    value="{{ query }}"
                                    autofocus>
-                        </div>
-                        <div class="d-grid mt-3">
-                            <button type="submit" class="btn btn-primary-custom">
-                                <i class="fas fa-search me-2"></i>Search Stocks
+                            <button type="submit" class="btn btn-primary-custom search-btn">
+                                <i class="fas fa-search me-2"></i>Search
                             </button>
                         </div>
+                        
+                        {% if not query %}
+                        <div class="search-suggestions mt-4">
+                            <h6 class="text-muted mb-3">
+                                <i class="fas fa-lightbulb me-2"></i>Popular Searches
+                            </h6>
+                            <div class="popular-tickers">
+                                {% for ticker in popular_tickers %}
+                                <a href="?q={{ ticker }}" class="popular-ticker-btn">
+                                    {{ ticker }}
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
                     </form>
                 </div>
             </div>
@@ -40,79 +58,237 @@
 
     <!-- Search Results -->
     {% if query %}
-        <div class="row mb-3">
+        <div class="row mb-4">
             <div class="col-lg-12">
-                <h4 class="text-primary-green">Search Results for "{{ query }}"</h4>
+                <div class="search-results-header fade-in-up">
+                    <h4 class="text-primary-custom mb-2">
+                        <i class="fas fa-chart-line me-2"></i>Search Results for "{{ query }}"
+                    </h4>
+                    <p class="text-muted">Found {{ stocks|length }} stock{{ stocks|length|pluralize }}</p>
+                </div>
             </div>
         </div>
         
         {% if stocks %}
-            <div class="row g-3">
+            <div class="row g-4">
                 {% for stock in stocks %}
-                <div class="col-md-6 col-lg-4">
-                    <div class="card stock-card h-100">
+                <div class="col-xl-4 col-lg-6 col-md-6">
+                    <div class="card stock-card-modern h-100 fade-in-up">
                         <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-3">
-                                <div>
-                                    <h5 class="stock-ticker mb-1">{{ stock.ticker }}</h5>
-                                    <p class="stock-name text-muted mb-0">{{ stock.name|truncatechars:30 }}</p>
-                                </div>
-                                <div class="text-end">
-                                    {% if stock.current_price %}
-                                        <span class="stock-price text-success-custom">${{ stock.current_price|floatformat:2 }}</span>
-                                    {% else %}
-                                        <span class="text-muted">Price N/A</span>
-                                    {% endif %}
+                            <!-- Stock Header -->
+                            <div class="stock-header mb-3">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="stock-info">
+                                        <h5 class="stock-ticker-modern mb-1">{{ stock.ticker }}</h5>
+                                        <p class="stock-name-modern text-muted mb-0">
+                                            {{ stock.name|truncatechars:35 }}
+                                        </p>
+                                    </div>
+                                    <div class="stock-price-container">
+                                        {% if stock.current_price %}
+                                            <div class="stock-price-modern">
+                                                ${{ stock.current_price|floatformat:2 }}
+                                            </div>
+                                        {% else %}
+                                            <div class="stock-price-unavailable">
+                                                <i class="fas fa-exclamation-triangle me-1"></i>
+                                                Price N/A
+                                            </div>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                             
-                            {% if stock.sector %}
-                            <div class="mb-2">
-                                <span class="badge bg-light-green text-dark">{{ stock.sector }}</span>
-                            </div>
-                            {% endif %}
-                            
-                            <div class="d-flex gap-2">
-                                <a href="{% url 'stock_detail' stock.ticker %}" class="btn btn-outline-success-custom btn-sm flex-fill">
-                                    <i class="fas fa-info-circle me-1"></i>Details
-                                </a>
+                            <!-- Stock Details -->
+                            <div class="stock-details mb-4">
+                                {% if stock.exchange %}
+                                <div class="stock-detail-item">
+                                    <small class="text-muted">Exchange:</small>
+                                    <span class="badge bg-light-custom text-dark">{{ stock.exchange }}</span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if stock.sector %}
+                                <div class="stock-detail-item mt-2">
+                                    <small class="text-muted">Sector:</small>
+                                    <span class="badge bg-primary-custom">{{ stock.sector }}</span>
+                                </div>
+                                {% endif %}
+                                
                                 {% if stock.current_price %}
-                                <a href="{% url 'buy_stock' stock.ticker %}" class="btn btn-primary-custom btn-sm flex-fill">
-                                    <i class="fas fa-shopping-cart me-1"></i>Buy
+                                <div class="stock-detail-item mt-2">
+                                    <small class="text-muted">Status:</small>
+                                    <span class="badge bg-success-custom">
+                                        <i class="fas fa-check-circle me-1"></i>Available
+                                    </span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="stock-actions d-grid gap-2">
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <a href="{% url 'stock_detail' stock.ticker %}" 
+                                           class="btn btn-outline-primary-custom btn-sm w-100">
+                                            <i class="fas fa-info-circle me-1"></i>Details
+                                        </a>
+                                    </div>
+                                    <div class="col-6">
+                                        {% if stock.current_price %}
+                                        <a href="{% url 'buy_stock' stock.ticker %}" 
+                                           class="btn btn-primary-custom btn-sm w-100">
+                                            <i class="fas fa-shopping-cart me-1"></i>Buy
+                                        </a>
+                                        {% else %}
+                                        <button class="btn btn-secondary btn-sm w-100" disabled>
+                                            <i class="fas fa-ban me-1"></i>Unavailable
+                                        </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                {% if user.is_authenticated %}
+                                <a href="{% url 'add_to_watchlist' stock.ticker %}" 
+                                   class="btn btn-outline-success-custom btn-sm">
+                                    <i class="fas fa-eye me-1"></i>Add to Watchlist
                                 </a>
                                 {% endif %}
                             </div>
                         </div>
+                        
+                        <!-- Card Footer with quick stats -->
+                        {% if stock.current_price %}
+                        <div class="card-footer stock-card-footer">
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <small class="text-muted d-block">Market Cap</small>
+                                    <small class="fw-bold">N/A</small>
+                                </div>
+                                <div class="col-4">
+                                    <small class="text-muted d-block">P/E Ratio</small>
+                                    <small class="fw-bold">N/A</small>
+                                </div>
+                                <div class="col-4">
+                                    <small class="text-muted d-block">Volume</small>
+                                    <small class="fw-bold">N/A</small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
                 {% endfor %}
             </div>
+            
+            <!-- Load More Button (if you implement pagination) -->
+            {% if stocks|length >= 10 %}
+            <div class="row mt-5">
+                <div class="col-lg-12 text-center">
+                    <div class="load-more-section">
+                        <p class="text-muted mb-3">Want to see more results?</p>
+                        <button class="btn btn-outline-primary-custom">
+                            <i class="fas fa-plus me-2"></i>Load More Stocks
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
         {% else %}
+            <!-- No Results Found -->
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body text-center py-5">
-                            <i class="fas fa-search fa-3x text-muted mb-3"></i>
-                            <h5 class="text-muted">No stocks found</h5>
-                            <p class="text-muted">Try searching with a different ticker symbol</p>
+                    <div class="card main-card text-center py-5">
+                        <div class="card-body">
+                            <div class="no-results-container">
+                                <i class="fas fa-search-minus fa-4x text-muted mb-4"></i>
+                                <h4 class="text-muted mb-3">No stocks found</h4>
+                                <p class="text-muted mb-4">
+                                    We couldn't find any stocks matching "{{ query }}". 
+                                    Try searching with a different ticker symbol.
+                                </p>
+                                <div class="suggestions">
+                                    <h6 class="text-muted mb-3">Try these popular stocks:</h6>
+                                    <div class="popular-tickers">
+                                        {% for ticker in popular_tickers|slice:":5" %}
+                                        <a href="?q={{ ticker }}" class="popular-ticker-btn">
+                                            {{ ticker }}
+                                        </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         {% endif %}
     {% else %}
-        <!-- Popular Suggestions -->
+        <!-- Welcome State - No Search Yet -->
         <div class="row">
             <div class="col-lg-12">
-                <div class="card bg-cream">
-                    <div class="card-body text-center">
-                        <h5 class="mb-3">Popular Stock Tickers</h5>
-                        <div class="row g-2">
-                            {% for ticker in popular_tickers %}
-                            <div class="col-6 col-md-3 col-lg-2">
-                                <a href="?q={{ ticker }}" class="btn btn-outline-success-custom btn-sm w-100">{{ ticker }}</a>
+                <div class="welcome-search-section text-center">
+                    <div class="row g-4">
+                        <!-- Feature Cards -->
+                        <div class="col-lg-4">
+                            <div class="feature-card-search">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-search fa-3x text-primary-custom"></i>
+                                </div>
+                                <h5 class="fw-bold mb-2">Smart Search</h5>
+                                <p class="text-muted">
+                                    Search by ticker symbol to find detailed stock information 
+                                    and real-time pricing data.
+                                </p>
                             </div>
-                            {% endfor %}
+                        </div>
+                        
+                        <div class="col-lg-4">
+                            <div class="feature-card-search">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-chart-line fa-3x text-success-custom"></i>
+                                </div>
+                                <h5 class="fw-bold mb-2">Real-time Data</h5>
+                                <p class="text-muted">
+                                    Get up-to-date stock prices, market data, and 
+                                    comprehensive financial information.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4">
+                            <div class="feature-card-search">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-shopping-cart fa-3x text-warning"></i>
+                                </div>
+                                <h5 class="fw-bold mb-2">Easy Trading</h5>
+                                <p class="text-muted">
+                                    Buy stocks instantly with our streamlined trading 
+                                    interface and portfolio management.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Start Section -->
+                    <div class="quick-start-section mt-5">
+                        <h5 class="text-primary-custom mb-4">
+                            <i class="fas fa-rocket me-2"></i>Quick Start
+                        </h5>
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="popular-tickers-section">
+                                    <p class="text-muted mb-3">Search these popular stocks to get started:</p>
+                                    <div class="popular-tickers">
+                                        {% for ticker in popular_tickers %}
+                                        <a href="?q={{ ticker }}" class="popular-ticker-btn">
+                                            {{ ticker }}
+                                        </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

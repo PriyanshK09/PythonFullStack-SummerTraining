@@ -60,6 +60,19 @@
                             <i class="fas fa-briefcase me-1"></i>Portfolio
                         </a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="walletDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-wallet me-1"></i>Wallet
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'wallet' %}">
+                                <i class="fas fa-eye me-2"></i>View Balance
+                            </a></li>
+                            <li><a class="dropdown-item" href="{% url 'add_money' %}">
+                                <i class="fas fa-plus me-2"></i>Add Money
+                            </a></li>
+                        </ul>
+                    </li>
                     {% endif %}
                 </ul>
                 

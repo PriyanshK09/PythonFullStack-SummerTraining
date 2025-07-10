@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Sum, F
+from django.db import transaction  # Add this import
 from .models import User, Stock, UserStock, Watchlist, StockPriceHistory
 from .forms import UserRegistrationForm, UserLoginForm, StockPurchaseForm
 import requests
@@ -510,3 +511,41 @@ def portfolio(request):
         'total_profit_loss': total_profit_loss
     }
     return render(request, 'crud/portfolio.html', context)
+
+@login_required
+def add_money(request):
+    """Add money to user's wallet"""
+    if request.method == 'POST':
+        try:
+            amount = Decimal(request.POST.get('amount', 0))
+            
+            # Validate amount
+            if amount <= 0:
+                messages.error(request, 'Please enter a valid amount greater than 0.')
+                return render(request, 'crud/add_money.html')
+            
+            if amount > 50000:  # Set a reasonable limit
+                messages.error(request, 'Maximum amount allowed is $50,000 per transaction.')
+                return render(request, 'crud/add_money.html')
+            
+            # Add money to user's balance
+            with transaction.atomic():
+                request.user.balance += amount
+                request.user.save()
+            
+            messages.success(request, f'${amount:,.2f} has been added to your wallet successfully!')
+            return redirect('dashboard')
+            
+        except (ValueError, TypeError):
+            messages.error(request, 'Please enter a valid numeric amount.')
+    
+    return render(request, 'crud/add_money.html')
+
+@login_required
+def wallet(request):
+    """Display wallet/balance information"""
+    context = {
+        'current_balance': request.user.balance,
+        'recent_transactions': []  # You can add transaction history here later
+    }
+    return render(request, 'crud/wallet.html', context)
