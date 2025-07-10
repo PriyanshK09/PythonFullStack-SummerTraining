@@ -1,0 +1,30 @@
+StockFolio - Transaction Receipt
+================================
+
+Dear {{ user.first_name|default:user.username }},
+
+{% if transaction.transaction_type == 'BUY' %}PURCHASE CONFIRMED{% else %}SALE CONFIRMED{% endif %}
+
+Your {{ transaction.transaction_type|lower }} order has been successfully executed.
+
+TRANSACTION DETAILS:
+-------------------
+Stock: {{ transaction.stock.ticker }} - {{ transaction.stock.name }}
+Transaction Type: {% if transaction.transaction_type == 'BUY' %}Purchase{% else %}Sale{% endif %}
+Quantity: {{ transaction.quantity }} shares
+Price per Share: ${{ transaction.buy_price|floatformat:2 }}
+Transaction Date: {{ transaction.transaction_date|date:"F d, Y at g:i A" }}
+Total Amount: ${{ total_amount|floatformat:2 }}
+
+UPDATED PORTFOLIO SUMMARY:
+-------------------------
+Available Balance: ${{ user.balance|floatformat:2 }}
+Total Portfolio Value: ${{ portfolio_value|floatformat:2 }}
+
+Thank you for choosing StockFolio for your investment needs.
+You can view your complete portfolio by logging into your account.
+
+---
+StockFolio - Your Professional Trading Platform
+This is an automated email. Please do not reply to this message.
+All trading involves risk. Past performance does not guarantee future results.

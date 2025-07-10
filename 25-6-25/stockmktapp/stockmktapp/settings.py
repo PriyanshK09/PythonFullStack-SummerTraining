@@ -130,9 +130,22 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Tiingo API Configuration
-TIINGO_API_KEY = 'YOUR_TIINGO_API_KEY_HERE'  # Replace with your actual API key
+TIINGO_API_KEY = '76502c062c45182ffaa1ced745d0b24d30e8625c'
 
 # Login/Logout URLs
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/'
+
+# Email Configuration
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For development
+# For production, use:
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'priyanshkhare0908@gmail.com'
+EMAIL_HOST_PASSWORD = 'tqhz qgcb ysir bkfg'
+
+DEFAULT_FROM_EMAIL = 'StockFolio <noreply@stockfolio.com>'
+EMAIL_USE_TLS = True

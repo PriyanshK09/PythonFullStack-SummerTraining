@@ -10,9 +10,11 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('stock/<str:ticker>/', views.stock_detail, name='stock_detail'),
     path('buy/<str:ticker>/', views.buy_stock, name='buy_stock'),
+    path('stock/<str:ticker>/sell/', views.sell_stock, name='sell_stock'),
     path('search/', views.search_stocks, name='search_stocks'),
     path('portfolio/', views.portfolio, name='portfolio'),
     path('watchlist/add/<str:ticker>/', views.add_to_watchlist, name='add_to_watchlist'),
     path('wallet/', views.wallet, name='wallet'),
     path('add-money/', views.add_money, name='add_money'),
+    path('test-email/', views.test_email, name='test_email'),
 ]

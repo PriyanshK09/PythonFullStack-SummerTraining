@@ -1,0 +1,127 @@
+{% extends 'crud/base.html' %}
+{% block title %}Sell {{ stock.ticker }} - StockFolio{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <!-- Stock Info Card -->
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <h2 class="stock-ticker text-primary-green">{{ stock.ticker }}</h2>
+                    <h5 class="text-muted mb-3">{{ stock.name }}</h5>
+                    <div class="stock-price display-4 text-success-custom mb-2">
+                        ${{ stock.current_price|floatformat:2 }}
+                    </div>
+                    <small class="text-muted">Current Price per Share</small>
+                    <div class="mt-3">
+                        <span class="badge bg-primary-custom">You own {{ total_shares }} shares</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sell Form -->
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-money-bill-wave me-2"></i>Sell Shares
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" id="sellForm">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label for="{{ form.quantity.id_for_label }}" class="form-label">Number of Shares to Sell</label>
+                            {{ form.quantity }}
+                            <div class="form-text">
+                                You currently own: <strong class="text-success">{{ total_shares }} shares</strong>
+                            </div>
+                        </div>
+
+                        <!-- Sale Calculator -->
+                        <div class="card bg-light mb-4">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <strong>Price per Share:</strong>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        ${{ stock.current_price|floatformat:2 }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <strong>Quantity to Sell:</strong>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <span id="displayQuantity">0</span> shares
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <strong>Total Sale Amount:</strong>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <strong class="text-success">$<span id="totalAmount">0.00</span></strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-danger btn-lg" id="sellButton">
+                                <i class="fas fa-money-bill-wave me-2"></i>Sell Shares
+                            </button>
+                            <a href="{% url 'portfolio' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Portfolio
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const quantityInput = document.getElementById('{{ form.quantity.id_for_label }}');
+    const displayQuantity = document.getElementById('displayQuantity');
+    const totalAmountElement = document.getElementById('totalAmount');
+    const sellButton = document.getElementById('sellButton');
+    const pricePerShare = {{ stock.current_price }};
+    const maxShares = {{ total_shares }};
+
+    function updateAmount() {
+        const quantity = parseInt(quantityInput.value) || 0;
+        const totalAmount = quantity * pricePerShare;
+        
+        displayQuantity.textContent = quantity;
+        totalAmountElement.textContent = totalAmount.toFixed(2);
+        
+        // Check if quantity is valid
+        if (quantity > maxShares) {
+            sellButton.disabled = true;
+            sellButton.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Exceeds Available Shares';
+            sellButton.classList.remove('btn-danger');
+            sellButton.classList.add('btn-warning');
+        } else if (quantity > 0) {
+            sellButton.disabled = false;
+            sellButton.innerHTML = '<i class="fas fa-money-bill-wave me-2"></i>Sell Shares';
+            sellButton.classList.remove('btn-warning');
+            sellButton.classList.add('btn-danger');
+        } else {
+            sellButton.disabled = true;
+            sellButton.innerHTML = '<i class="fas fa-money-bill-wave me-2"></i>Sell Shares';
+            sellButton.classList.remove('btn-warning');
+            sellButton.classList.add('btn-danger');
+        }
+    }
+
+    quantityInput.addEventListener('input', updateAmount);
+    updateAmount(); // Initial calculation
+});
+</script>
+{% endblock %}

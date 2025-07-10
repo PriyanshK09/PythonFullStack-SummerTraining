@@ -137,6 +137,9 @@
                                                 <a href="{% url 'buy_stock' holding.stock.ticker %}" class="btn btn-outline-primary">
                                                     <i class="fas fa-plus"></i>
                                                 </a>
+                                                <a href="{% url 'sell_stock' holding.stock.ticker %}" class="btn btn-outline-danger">
+                                                    <i class="fas fa-money-bill-wave"></i>
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>
