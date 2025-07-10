@@ -120,3 +120,17 @@ For any questions or feedback regarding the training program, please contact:
 - Understanding Lazy vs Eager Loading
 - Implementing Lazy Loading in Django
 - Implementing Eager Loading in Django
+
+# Major Projects
+## Stock Market Application
+This project is a stock market application built using Django. It allows users to view stock prices, buy and sell stocks, manage their portfolio, and more.
+### Features
+- User authentication and registration
+- Stock market dashboard
+- Buy and sell stocks
+- Portfolio management
+- Watchlist for favorite stocks
+- Search functionality for stocks
+- Wallet management for transactions
+### Link to Project
+- [Stock Market Application](/25-6-25/stockmktapp/)
