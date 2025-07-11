@@ -1,0 +1,274 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - ShopEasy{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Welcome to ShopEasy</h1>
+                <p class="lead mb-4">Discover amazing products at unbeatable prices. Your shopping journey starts here!</p>
+                <div class="d-flex gap-3">
+                    <a href="{% url 'products-page' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-shopping-cart me-2"></i>Shop Now
+                    </a>
+                    <a href="{% url 'api-root' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-code me-2"></i>API Docs
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <i class="fas fa-shopping-bag" style="font-size: 15rem; opacity: 0.1;"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Search Section -->
+{% if search_query %}
+<section class="search-section">
+    <div class="container">
+        <h3>Search Results for "{{ search_query }}"</h3>
+        {% if search_results %}
+            <div class="row">
+                {% for product in search_results %}
+                <div class="col-md-3 mb-4">
+                    <div class="card product-card">
+                        <div class="position-relative">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" class="card-img-top product-image" alt="{{ product.name }}">
+                            {% else %}
+                                <div class="card-img-top product-image bg-light d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-image fa-3x text-muted"></i>
+                                </div>
+                            {% endif %}
+                            {% if product.is_in_stock %}
+                                <span class="badge bg-success stock-badge">In Stock</span>
+                            {% else %}
+                                <span class="badge bg-danger stock-badge">Out of Stock</span>
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-title">{{ product.name }}</h6>
+                            <p class="card-text text-muted small">{{ product.description|truncatewords:10 }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="price-tag">${{ product.price }}</span>
+                                <small class="text-muted">{{ product.category.name }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted">No products found matching your search.</p>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+
+<!-- Categories Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-6 fw-bold">Shop by Category</h2>
+            <p class="lead text-muted">Explore our wide range of product categories</p>
+        </div>
+        
+        <div class="row">
+            {% for category in categories %}
+            <div class="col-md-4 col-lg-2 mb-4">
+                <a href="{% url 'category-detail-page' category.id %}" class="text-decoration-none">
+                    <div class="card category-card text-center h-100">
+                        <div class="card-body">
+                            {% if category.image %}
+                                <img src="{{ category.image.url }}" class="mb-3" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%;" alt="{{ category.name }}">
+                            {% else %}
+                                <i class="fas fa-tags fa-3x text-primary mb-3"></i>
+                            {% endif %}
+                            <h6 class="card-title">{{ category.name }}</h6>
+                            <small class="text-muted">{{ category.products.count }} products</small>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-6 fw-bold">Featured Products</h2>
+            <p class="lead text-muted">Check out our most popular items</p>
+        </div>
+        
+        <div class="row">
+            {% for product in featured_products %}
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card product-card">
+                    <div class="position-relative">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" class="card-img-top product-image" alt="{{ product.name }}">
+                        {% else %}
+                            <div class="card-img-top product-image bg-light d-flex align-items-center justify-content-center">
+                                <i class="fas fa-image fa-3x text-muted"></i>
+                            </div>
+                        {% endif %}
+                        {% if product.is_in_stock %}
+                            <span class="badge bg-success stock-badge">In Stock</span>
+                        {% else %}
+                            <span class="badge bg-danger stock-badge">Out of Stock</span>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title">{{ product.name }}</h6>
+                        <p class="card-text text-muted small">{{ product.description|truncatewords:10 }}</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="price-tag">${{ product.price }}</span>
+                            <small class="text-muted">{{ product.category.name }}</small>
+                        </div>
+                        <div class="d-grid">
+                            {% if user.is_authenticated %}
+                                <form method="post" action="{% url 'add-to-cart-web' %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" class="btn btn-primary btn-sm" {% if not product.is_in_stock %}disabled{% endif %}>
+                                        <i class="fas fa-cart-plus me-1"></i>
+                                        {% if product.is_in_stock %}Add to Cart{% else %}Out of Stock{% endif %}
+                                    </button>
+                                </form>
+                            {% else %}
+                                <a href="{% url 'signin' %}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-sign-in-alt me-1"></i>Login to Add
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'products-page' %}" class="btn btn-outline-primary btn-lg">
+                View All Products <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Latest Products Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-6 fw-bold">Latest Arrivals</h2>
+            <p class="lead text-muted">Fresh products just added to our store</p>
+        </div>
+        
+        <div class="row">
+            {% for product in latest_products %}
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card product-card">
+                    <div class="position-relative">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" class="card-img-top product-image" alt="{{ product.name }}">
+                        {% else %}
+                            <div class="card-img-top product-image bg-light d-flex align-items-center justify-content-center">
+                                <i class="fas fa-image fa-3x text-muted"></i>
+                            </div>
+                        {% endif %}
+                        <span class="badge bg-warning stock-badge">New</span>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title">{{ product.name }}</h6>
+                        <p class="card-text text-muted small">{{ product.description|truncatewords:10 }}</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="price-tag">${{ product.price }}</span>
+                            <small class="text-muted">{{ product.category.name }}</small>
+                        </div>
+                        <div class="d-grid">
+                            {% if user.is_authenticated %}
+                                <form method="post" action="{% url 'add-to-cart-web' %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" class="btn btn-primary btn-sm" {% if not product.is_in_stock %}disabled{% endif %}>
+                                        <i class="fas fa-cart-plus me-1"></i>
+                                        {% if product.is_in_stock %}Add to Cart{% else %}Out of Stock{% endif %}
+                                    </button>
+                                </form>
+                            {% else %}
+                                <a href="{% url 'signin' %}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-sign-in-alt me-1"></i>Login to Add
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Quick Stats Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 mb-4">
+                <div class="mb-3">
+                    <i class="fas fa-shipping-fast fa-3x"></i>
+                </div>
+                <h4>Fast Delivery</h4>
+                <p>Quick and reliable shipping worldwide</p>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="mb-3">
+                    <i class="fas fa-shield-alt fa-3x"></i>
+                </div>
+                <h4>Secure Payment</h4>
+                <p>100% secure payment processing</p>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="mb-3">
+                    <i class="fas fa-undo fa-3x"></i>
+                </div>
+                <h4>Easy Returns</h4>
+                <p>30-day hassle-free return policy</p>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="mb-3">
+                    <i class="fas fa-headset fa-3x"></i>
+                </div>
+                <h4>24/7 Support</h4>
+                <p>Round-the-clock customer support</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Search Form (Fixed at top) -->
+<div class="position-fixed top-50 end-0 translate-middle-y" style="z-index: 1000;">
+    <div class="card shadow-lg" style="width: 300px;">
+        <div class="card-header bg-primary text-white">
+            <h6 class="mb-0"><i class="fas fa-search me-2"></i>Quick Search</h6>
+        </div>
+        <div class="card-body">
+            <form method="GET" action="{% url 'home' %}">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="search" placeholder="Search products..." value="{{ search_query }}">
+                    <button class="btn btn-outline-primary" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

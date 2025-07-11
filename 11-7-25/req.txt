@@ -1,0 +1,19 @@
+Cart functionality :
+
+Cart model :
+
+User -> One to one
+Product -> many to many , Quantity
+So make another Model called user Product
+Cart is many to one related to UserProduct
+
+Views:
+
+Add to cart
+Make a inventory check decorator
+Remove from cart
+Billing
+
+Accessible by only Customer
+
+Automated reminder mails with Django mailer and Django cron
