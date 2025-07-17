@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import dj_database_url
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -153,7 +154,9 @@ EMAIL_USE_TLS = True
 
 # Database Connection
 DATABASES = {
-    'default': dj_database_url.parse(
-        'postgresql://postgres.uqgbqhovhtygvhphyoit:Priyansh0908@aws-0-ap-south-1.pooler.supabase.com:5432/postgres'
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        ssl_require=True
     )
 }
