@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-gz=u#3clvg8@)tf*m83a^o7yf6y(b4erpe!#+&v1m!m9e!ruti
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -149,3 +150,10 @@ EMAIL_HOST_PASSWORD = 'tqhz qgcb ysir bkfg'
 
 DEFAULT_FROM_EMAIL = 'StockFolio <noreply@stockfolio.com>'
 EMAIL_USE_TLS = True
+
+# Database Connection
+DATABASES = {
+    'default': dj_database_url.parse(
+        'postgresql://postgres:Priyansh0908@db.uqgbqhovhtygvhphyoit.supabase.co:5432/postgres',
+    )
+}

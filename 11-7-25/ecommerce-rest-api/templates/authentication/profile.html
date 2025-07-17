@@ -3,84 +3,157 @@
 {% block title %}Profile - ShopEasy{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <div class="mb-3">
-                        <i class="fas fa-user-circle fa-5x text-primary"></i>
+<section class="section bg-white">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <div class="card" style="border-radius: 20px; box-shadow: var(--shadow-lg);">
+                    <div class="card-body p-4 text-center">
+                        <div class="mb-3">
+                            <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                <i class="fas fa-user fa-2x text-white"></i>
+                            </div>
+                        </div>
+                        <h5 class="fw-semibold mb-1">{{ user.get_full_name|default:user.username }}</h5>
+                        <p class="text-caption mb-3">{{ user.email }}</p>
+                        <span class="badge bg-success px-3 py-2">Active Member</span>
                     </div>
-                    <h4>{{ user.get_full_name|default:user.username }}</h4>
-                    <p class="text-muted">{{ user.user_type|capfirst }} Account</p>
-                    <span class="badge bg-success">Active</span>
                 </div>
-            </div>
-        </div>
-        
-        <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="fas fa-user me-2"></i>Account Information</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-sm-3"><strong>Username:</strong></div>
-                        <div class="col-sm-9">{{ user.username }}</div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-3"><strong>Email:</strong></div>
-                        <div class="col-sm-9">{{ user.email }}</div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-3"><strong>Full Name:</strong></div>
-                        <div class="col-sm-9">{{ user.get_full_name|default:"Not provided" }}</div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-3"><strong>Phone:</strong></div>
-                        <div class="col-sm-9">{{ user.phone|default:"Not provided" }}</div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-3"><strong>Address:</strong></div>
-                        <div class="col-sm-9">{{ user.address|default:"Not provided" }}</div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-3"><strong>Member Since:</strong></div>
-                        <div class="col-sm-9">{{ user.date_joined|date:"F d, Y" }}</div>
+                
+                <div class="card mt-4" style="border-radius: 20px; box-shadow: var(--shadow-md);">
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush">
+                            <a href="#profile" class="list-group-item list-group-item-action active" style="border-radius: 20px 20px 0 0;">
+                                <i class="fas fa-user me-2"></i>Profile Information
+                            </a>
+                            <a href="#orders" class="list-group-item list-group-item-action">
+                                <i class="fas fa-shopping-bag me-2"></i>Order History
+                            </a>
+                            <a href="{% url 'cart-page' %}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-shopping-cart me-2"></i>Shopping Cart
+                            </a>
+                            <a href="#settings" class="list-group-item list-group-item-action" style="border-radius: 0 0 20px 20px;">
+                                <i class="fas fa-cog me-2"></i>Settings
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <div class="card shadow-sm mt-4">
-                <div class="card-header bg-secondary text-white">
-                    <h5 class="mb-0"><i class="fas fa-cog me-2"></i>Quick Actions</h5>
+            
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <!-- Profile Information -->
+                <div class="card mb-4" style="border-radius: 20px; box-shadow: var(--shadow-lg);">
+                    <div class="card-header" style="background: var(--gradient-primary); color: white; border-radius: 20px 20px 0 0;">
+                        <h5 class="mb-0 fw-semibold">
+                            <i class="fas fa-user me-2"></i>Profile Information
+                        </h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-semibold">First Name</label>
+                                    <input type="text" class="form-control" value="{{ user.first_name }}" name="first_name">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-semibold">Last Name</label>
+                                    <input type="text" class="form-control" value="{{ user.last_name }}" name="last_name">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-semibold">Email</label>
+                                    <input type="email" class="form-control" value="{{ user.email }}" name="email">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-semibold">Phone</label>
+                                    <input type="text" class="form-control" value="{{ user.phone|default:'' }}" name="phone">
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label class="form-label fw-semibold">Address</label>
+                                    <textarea class="form-control" rows="3" name="address">{{ user.address|default:'' }}</textarea>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Update Profile
+                            </button>
+                        </form>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <a href="{% url 'cart-page' %}" class="btn btn-primary w-100">
-                                <i class="fas fa-shopping-cart me-2"></i>View Cart
-                            </a>
+                
+                <!-- Quick Stats -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-4">
+                        <div class="card text-center" style="border-radius: 16px; box-shadow: var(--shadow-md); background: var(--gradient-secondary);">
+                            <div class="card-body p-4 text-white">
+                                <i class="fas fa-shopping-bag fa-2x mb-3 opacity-75"></i>
+                                <h4 class="fw-bold">12</h4>
+                                <p class="mb-0 opacity-75">Total Orders</p>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <a href="{% url 'products-page' %}" class="btn btn-success w-100">
-                                <i class="fas fa-shopping-bag me-2"></i>Continue Shopping
-                            </a>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center" style="border-radius: 16px; box-shadow: var(--shadow-md); background: var(--gradient-accent);">
+                            <div class="card-body p-4 text-white">
+                                <i class="fas fa-shopping-cart fa-2x mb-3 opacity-75"></i>
+                                <h4 class="fw-bold">{{ user.cart.total_items|default:0 }}</h4>
+                                <p class="mb-0 opacity-75">Cart Items</p>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <a href="#" class="btn btn-info w-100">
-                                <i class="fas fa-edit me-2"></i>Edit Profile
-                            </a>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center" style="border-radius: 16px; box-shadow: var(--shadow-md); background: var(--success-color);">
+                            <div class="card-body p-4 text-white">
+                                <i class="fas fa-heart fa-2x mb-3 opacity-75"></i>
+                                <h4 class="fw-bold">5</h4>
+                                <p class="mb-0 opacity-75">Wishlist Items</p>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <a href="{% url 'signout' %}" class="btn btn-outline-danger w-100">
-                                <i class="fas fa-sign-out-alt me-2"></i>Sign Out
-                            </a>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="card" style="border-radius: 20px; box-shadow: var(--shadow-lg);">
+                    <div class="card-header" style="background: var(--light-bg); border-radius: 20px 20px 0 0;">
+                        <h5 class="mb-0 fw-semibold">
+                            <i class="fas fa-clock me-2"></i>Recent Activity
+                        </h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="timeline">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rounded-circle bg-success d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                    <i class="fas fa-check text-white"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1 fw-semibold">Order Delivered</h6>
+                                    <small class="text-muted">Your iPhone 16 Pro order has been delivered successfully</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                    <i class="fas fa-shopping-cart text-white"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1 fw-semibold">Item Added to Cart</h6>
+                                    <small class="text-muted">Added MacBook Pro to your shopping cart</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle bg-warning d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                    <i class="fas fa-user text-white"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1 fw-semibold">Profile Updated</h6>
+                                    <small class="text-muted">Updated your profile information</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 {% endblock %}
