@@ -75,12 +75,12 @@ WSGI_APPLICATION = 'stockmktapp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # Custom User Model
 AUTH_USER_MODEL = 'crud.User'
@@ -154,6 +154,6 @@ EMAIL_USE_TLS = True
 # Database Connection
 DATABASES = {
     'default': dj_database_url.parse(
-        'postgresql://postgres:Priyansh0908@db.uqgbqhovhtygvhphyoit.supabase.co:5432/postgres',
+        'postgresql://postgres.uqgbqhovhtygvhphyoit:Priyansh0908@aws-0-ap-south-1.pooler.supabase.com:5432/postgres'
     )
 }
