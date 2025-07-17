@@ -1,0 +1,482 @@
+:root {
+    /* Money Color Palette */
+    --primary-green: #2E7D32;      /* Dark Green */
+    --success-green: #4CAF50;      /* Success Green */
+    --light-green: #C8E6C9;        /* Light Green */
+    --gold: #FFD700;               /* Gold */
+    --dark-gold: #B8860B;          /* Dark Gold */
+    --cream: #FFF8E1;              /* Cream */
+    --charcoal: #2C2C2C;           /* Dark Gray */
+    --light-gray: #F5F5F5;         /* Light Gray */
+    --red: #D32F2F;                /* Loss Red */
+    --white: #FFFFFF;
+    
+    /* Fonts */
+    --font-primary: 'Inter', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--light-gray);
+    color: var(--charcoal);
+    line-height: 1.6;
+}
+
+.main-content {
+    min-height: calc(100vh - 140px);
+}
+
+/* Custom Background Classes */
+.bg-dark-green {
+    background-color: var(--primary-green) !important;
+}
+
+.bg-light-green {
+    background-color: var(--light-green) !important;
+}
+
+.bg-gold {
+    background-color: var(--gold) !important;
+}
+
+.bg-cream {
+    background-color: var(--cream) !important;
+}
+
+/* Text Colors */
+.text-success-custom {
+    color: var(--success-green) !important;
+}
+
+.text-gold {
+    color: var(--dark-gold) !important;
+}
+
+.text-loss {
+    color: var(--red) !important;
+}
+
+/* Additional styles for stock detail and buy pages */
+.text-primary-green {
+    color: var(--primary-green) !important;
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    background-color: var(--primary-green);
+    color: white;
+    border-radius: 12px 12px 0 0 !important;
+    border-bottom: none;
+    font-weight: 600;
+}
+
+/* Buttons */
+.btn-primary-custom {
+    background-color: var(--primary-green);
+    border-color: var(--primary-green);
+    color: white;
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary-custom:hover {
+    background-color: #1B5E20;
+    border-color: #1B5E20;
+    transform: translateY(-1px);
+}
+
+.btn-gold {
+    background-color: var(--gold);
+    border-color: var(--gold);
+    color: var(--charcoal);
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.btn-gold:hover {
+    background-color: var(--dark-gold);
+    border-color: var(--dark-gold);
+    color: white;
+}
+
+.btn-outline-success-custom {
+    color: var(--success-green);
+    border-color: var(--success-green);
+    border-radius: 8px;
+}
+
+.btn-outline-success-custom:hover {
+    background-color: var(--success-green);
+    border-color: var(--success-green);
+}
+
+/* Forms */
+.form-control {
+    border-radius: 8px;
+    border: 2px solid #E0E0E0;
+    padding: 12px 15px;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--success-green);
+    box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+}
+
+#buyForm .form-control:focus {
+    border-color: var(--success-green);
+    box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--charcoal);
+    margin-bottom: 8px;
+}
+
+/* Statistics Cards */
+.stat-card {
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green));
+    color: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.stat-card .stat-icon {
+    font-size: 2.5rem;
+    opacity: 0.8;
+}
+
+.stat-card .stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 10px 0 5px 0;
+}
+
+.stat-card .stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Stock Cards */
+.stock-card {
+    border-left: 4px solid var(--success-green);
+    transition: all 0.3s ease;
+}
+
+.stock-card:hover {
+    border-left-color: var(--gold);
+}
+
+.stock-ticker {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.stock-name {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.stock-price {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.price-positive {
+    color: var(--success-green);
+}
+
+.price-negative {
+    color: var(--red);
+}
+
+/* Tables */
+.table {
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.table thead th {
+    background-color: var(--primary-green);
+    color: white;
+    border: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.85rem;
+}
+
+.table-hover tbody tr:hover {
+    background-color: var(--cream);
+    transition: background-color 0.3s ease;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green));
+    color: white;
+    padding: 80px 0;
+    text-align: center;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.hero-subtitle {
+    font-size: 1.3rem;
+    opacity: 0.9;
+    margin-bottom: 30px;
+}
+
+/* Stock detail page */
+.stock-detail-price {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+/* Responsive text sizes */
+@media (max-width: 576px) {
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .stock-detail-price {
+        font-size: 1.8rem;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .stat-card .stat-value {
+        font-size: 1.5rem;
+    }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--success-green);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-green);
+}
+
+/* Loading Spinner */
+.spinner-custom {
+    color: var(--success-green);
+}
+
+/* Badge Styles */
+.badge-success-custom {
+    background-color: var(--success-green);
+}
+
+.badge-gold {
+    background-color: var(--gold);
+    color: var(--charcoal);
+}
+
+/* Search Box */
+.search-box {
+    position: relative;
+}
+
+.search-box .form-control {
+    padding-left: 40px;
+}
+
+.search-box .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+}
+
+/* Loading state for buttons */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Stock Detail Page Enhancements */
+.stock-ticker {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.stock-price {
+    font-weight: bold;
+}
+
+.text-success-custom {
+    color: #28a745 !important;
+}
+
+.text-primary-green {
+    color: #198754 !important;
+}
+
+.bg-light-green {
+    background-color: #d4edda !important;
+}
+
+.bg-cream {
+    background-color: #f8f9fa !important;
+}
+
+.btn-primary-custom {
+    background-color: #198754;
+    border-color: #198754;
+    color: white;
+}
+
+.btn-primary-custom:hover {
+    background-color: #157347;
+    border-color: #146c43;
+}
+
+.btn-gold {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000;
+}
+
+.btn-gold:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+    color: #000;
+}
+
+/* News Section */
+.news-item {
+    transition: background-color 0.2s;
+}
+
+.news-item:hover {
+    background-color: #f8f9fa;
+    border-radius: 0.375rem;
+    padding: 0.5rem;
+}
+
+.news-item h6 a {
+    color: #495057;
+}
+
+.news-item h6 a:hover {
+    color: #198754;
+}
+
+/* Chart Container */
+#priceChart {
+    max-height: 400px;
+}
+
+/* Price Statistics */
+.price-stats .col-md-3 {
+    border-right: 1px solid #dee2e6;
+}
+
+.price-stats .col-md-3:last-child {
+    border-right: none;
+}
+
+/* Market Status Badge */
+#marketStatus {
+    padding: 0.5rem 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .stock-price {
+        font-size: 2rem !important;
+    }
+    
+    .price-stats .col-md-3 {
+        border-right: none;
+        border-bottom: 1px solid #dee2e6;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+    }
+    
+    .price-stats .col-md-3:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+}
+
+/* Loading animation for charts */
+.chart-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+}
